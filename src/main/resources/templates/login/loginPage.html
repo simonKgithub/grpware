@@ -168,7 +168,8 @@
     </div>
     <div class="d-grid gap-2">
       <button class="btn btn-primary w-100 py-2" type="submit">로그인</button>
-      <button class="btn btn-outline-secondary w-100 py-sm-1" type="submit">회원가입</button>
+      <button class="btn btn-outline-secondary w-100 py-sm-1" type="button"
+              onclick="goToMemberJoinPage()">회원가입</button>
     </div>
     <p class="mt-5 mb-3 text-body-secondary">&copy; Groupware for Study</p>
   </form>
@@ -187,6 +188,10 @@
     let newLogoNum = (logoNum+1)%6;
     const newSrc = frontSrc + newLogoNum + backSrc;
     logo.setAttribute("src", newSrc);
+  }
+
+  function goToMemberJoinPage(){
+    window.location.href = "member/memberJoin";
   }
 </script>
     </body>
