@@ -146,8 +146,67 @@
 
 <main class="form-signin w-100 m-auto">
     <form>
-        <img class="mb-4" src="/images/login/login0.svg" alt="" width="72" height="57" id="loginLogo">
+        <img class="mb-4" src="/images/member/memberJoin0.svg" alt="" width="72" height="57" id="memberJoin">
         <h1 class="h4 mb-3 fw-normal">양식을 작성해주세요😁</h1>
+        <div class="row g-3">
+            <div class="col-sm-5">
+                <label for="email_id" class="form-label">이메일(e-mail)</label>
+                <input type="text" class="form-control" id="email_id" placeholder="e-mail" value="" required="">
+                <div class="invalid-feedback">
+                    Valid first name is required.
+                </div>
+            </div>
+            <div class="col-sm-7">
+                <label for="email_address" class="form-label">주소(address)</label>
+                <input type="text" class="form-control" id="email_address" placeholder="@example.com" value="" required="">
+                <div class="invalid-feedback">
+                    Valid last name is required.
+                </div>
+            </div>
+            <div class="col-12">
+                <div class="input-group has-validation">
+                    <span class="input-group-text">@</span>
+                    <select class="form-select" id="email_example" required="">
+                        <option value="none">직접작성</option>
+                        <option value="@naver.com">naver.com (네이버)</option>
+                        <option value="@gmail.com">gmail.com (구글, 지메일)</option>
+                    </select>
+                    <div class="invalid-feedback">
+                        Your username is required.
+                    </div>
+                </div>
+            </div>
+            <div class="d-grid gap-2">
+                <button class="btn btn-outline-secondary w-100 py-sm-1" type="button" id="emailCheckBtn">확인 코드 보내기</button>
+                <button class="btn btn-secondary w-100 py-sm-1" type="button" id="rewriteBtn">다시 작성하기</button>
+            </div>
+            <div class="input-group" id="emailCodeCheckDiv">
+                <input type="text" class="form-control" placeholder="코드를 입력해주세요." id="emailCodeInput">
+                <button type="button" class="btn btn-secondary">확인하기</button>
+            </div>
+
+            <div class="col-12">
+                <label for="email_id" class="form-label">이메일</label>
+                <div class="input-group has-validation">
+                    <input type="text" class="form-control" id="email_id2" placeholder="이메일 아이디" required="" style="text-align: end;">
+                    <span class="input-group-text">@</span>
+                    <input type="text" class="form-control" id="email_address2" placeholder="이메일 주소" required="">
+                    <div class="invalid-feedback">
+                        Your username is required.
+                    </div>
+                </div>
+            </div>
+            <div class="d-grid gap-2">
+                <button class="btn btn-outline-secondary w-100 py-sm-1" type="button">확인 코드 보내기</button>
+            </div>
+            <form class="card p-2">
+                <div class="input-group">
+                    <input type="text" class="form-control" placeholder="코드를 입력해주세요.">
+                    <button type="submit" class="btn btn-secondary">확인하기</button>
+                </div>
+            </form>
+        </div>
+
 
         <div class="form-floating">
             <input type="email" class="form-control" id="floatingInput" placeholder="name@example.com">
@@ -174,22 +233,99 @@
 </main>
 <script src="/js/bootstrap.bundle.min.js"></script>
 <script>
-    let logo = document.getElementById("loginLogo");
+    /* 전역변수 선언 */
+    const logo = document.getElementById("memberJoin");
+    const emailExample = document.getElementById("email_example");
+    const emailCheckBtn = document.getElementById("emailCheckBtn");
+    const rewriteBtn = document.getElementById("rewriteBtn");
+    const emailCodeCheckDiv = document.getElementById("emailCodeCheckDiv");
+
+
+
+    /* Listener control Area */
+    // 다시 작성하기 버튼 클릭
+    rewriteBtn.addEventListener("click", emailRewrite);
+    // 이메일 확인 코드 보내기 버튼
+    emailCheckBtn.addEventListener("click", emailCheckProcess);
+    // 이메일 코드 입히기
+    emailExample.addEventListener("change", selectBoxChange);
     //이미지 변경
     setInterval(changeLogo, 700);
 
+    /* Document.ready */
+    window.onload = onPageLoad;
+    function onPageLoad() {
+        emailInitialSetting(); //이메일 초기 세팅
+    }
+
+    /* Function Area */
+    // 이메일 확인 코드 보내기
+    function emailCheckProcess(){
+        if ( emailValueCheck() ) {
+            rewriteBtn.style.display = "block";
+            emailCodeCheckDiv.style.display = "block";
+
+        }
+    }
+    // 이메일 다시 작성하기
+    function emailRewrite(){
+        emailInitialSetting();
+    }
+    // 이메일 유효성 체크
+    function emailValueCheck(){
+        const emailId = document.getElementById("email_id");
+        const emailAddress = document.getElementById("email_address");
+        const emailExample = document.getElementById("email_example");
+        if (emailId.value != "" && emailAddress.value != "") {
+            //위 주소의 이메일에서 확인하시기 바랍니다.
+            emailCheckBtn.innerHTML = "이메일로 확인 코드를 보냈습니다.";
+            emailCheckBtn.disabled = true;
+            emailExample.disabled = true;
+            emailId.disabled = true;
+            emailAddress.disabled = true;
+            return true;
+        } else {
+            alert("이메일 양식에 빈칸이 존재합니다.\n양식을 채워주시기 바랍니다.");
+            if (emailId.value == "") { emailId.focus(); }
+            else { emailAddress.focus(); }
+            return false;
+        }
+    }
+    // 이메일 초기 세팅
+    function emailInitialSetting(){
+        const emailId = document.getElementById("email_id");
+        const emailExample = document.getElementById("email_example");
+
+        rewriteBtn.style.display = "none";
+        emailCodeCheckDiv.style.display = "none";
+
+        emailCheckBtn.disabled = false;
+        emailCheckBtn.innerText = "확인 코드 보내기";
+        emailId.disabled = false;
+        emailExample.disabled = false;
+        selectBoxChange();
+    }
+    // 이메일 주소 고르기
+    function selectBoxChange(){
+        const email_address = document.getElementById("email_address");
+        let value = emailExample.value;
+        if ( value == 'none') {
+            email_address.disabled = false;
+            email_address.value = "";
+        } else {
+            email_address.disabled = true;
+            email_address.value = emailExample.value;
+        }
+    }
+    //이미지 변경 함수
     function changeLogo(){
-        const frontSrc = "/images/login/login";
+        const frontSrc = "/images/member/memberJoin";
         const backSrc = ".svg";
         let src = logo.getAttribute("src");
         let logoNum = parseInt(src.replace(/\D/g, ""));//숫자 추출
-        let newLogoNum = (logoNum+1)%6;
+        let newLogoNum = (logoNum+1)%4;
         const newSrc = frontSrc + newLogoNum + backSrc;
         logo.setAttribute("src", newSrc);
-    }
-
-    function goToMemberJoinPage(){
-        window.location.href = "member/memberJoin";
     }
 </script>
 </body>
