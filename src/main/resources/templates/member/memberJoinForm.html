@@ -150,15 +150,15 @@
         <h1 class="h4 mb-3 fw-normal">양식을 작성해주세요😁</h1>
         <div class="row g-3">
             <div class="col-sm-5">
-                <label for="email_id" class="form-label">이메일(e-mail)</label>
-                <input type="text" class="form-control" id="email_id" placeholder="e-mail" value="" required="">
+                <label for="emailId" class="form-label">이메일(e-mail)</label>
+                <input type="text" class="form-control" id="emailId" placeholder="e-mail" value="" required="" autocomplete="emailId">
                 <div class="invalid-feedback">
                     Valid first name is required.
                 </div>
             </div>
             <div class="col-sm-7">
-                <label for="email_address" class="form-label">주소(address)</label>
-                <input type="text" class="form-control" id="email_address" placeholder="@example.com" value="" required="">
+                <label for="emailAddress" class="form-label">주소(address)</label>
+                <input type="text" class="form-control" id="emailAddress" placeholder="@example.com" value="" required="">
                 <div class="invalid-feedback">
                     Valid last name is required.
                 </div>
@@ -166,7 +166,7 @@
             <div class="col-12">
                 <div class="input-group has-validation">
                     <span class="input-group-text">@</span>
-                    <select class="form-select" id="email_example" required="">
+                    <select class="form-select" id="emailExample" required="">
                         <option value="none">직접작성</option>
                         <option value="@naver.com">naver.com (네이버)</option>
                         <option value="@gmail.com">gmail.com (구글, 지메일)</option>
@@ -182,52 +182,45 @@
             </div>
             <div class="input-group" id="emailCodeCheckDiv">
                 <input type="text" class="form-control" placeholder="코드를 입력해주세요." id="emailCodeInput">
-                <button type="button" class="btn btn-secondary">확인하기</button>
+                <button type="button" class="btn btn-secondary" id="emailCodeCheckBtn">확인하기</button>
             </div>
-
+            <hr class="my-3">
             <div class="col-12">
-                <label for="email_id" class="form-label">이메일</label>
-                <div class="input-group has-validation">
-                    <input type="text" class="form-control" id="email_id2" placeholder="이메일 아이디" required="" style="text-align: end;">
-                    <span class="input-group-text">@</span>
-                    <input type="text" class="form-control" id="email_address2" placeholder="이메일 주소" required="">
+                <label for="password" class="form-label">비밀번호(Password)</label>
+                <input type="password" class="form-control" id="password" placeholder="Password" required="" autocomplete="new-password">
+                <label for="passwordCheck" class="form-label">비밀번호 확인  <span id="passwordCheckInfo" style="font-size: small"></span></label>
+                <input type="password" class="form-control" id="passwordCheck" placeholder="Password Re-Check" required="" autocomplete="new-password">
+                <div class="invalid-feedback">
+                    Please enter your shipping address.
+                </div>
+            </div>
+            <hr class="my-2">
+            <div class="d-grid gap-2">
+                <div class="col-12">
+                    <label for="memberName" class="form-label">이름</label>
+                    <input type="text" class="form-control" id="memberName" placeholder="홍길동" required="" maxlength="10">
                     <div class="invalid-feedback">
-                        Your username is required.
+                        Please enter your shipping address.
+                    </div>
+                </div>
+                <div class="col-12">
+                    <label for="memberNumber" class="form-label">휴대폰번호</label>
+                    <input type="text" class="form-control" id="memberNumber" placeholder="01012345678" required="" maxlength="13">
+                    <div class="invalid-feedback">
+                        Please enter your shipping address.
+                    </div>
+                </div>
+                <div class="col-12">
+                    <label for="memberBirth" class="form-label">생년월일</label>
+                    <input type="text" class="form-control" id="memberBirth" placeholder="1990-12-31" required="" maxlength="10">
+                    <div class="invalid-feedback">
+                        Please enter your shipping address.
                     </div>
                 </div>
             </div>
-            <div class="d-grid gap-2">
-                <button class="btn btn-outline-secondary w-100 py-sm-1" type="button">확인 코드 보내기</button>
-            </div>
-            <form class="card p-2">
-                <div class="input-group">
-                    <input type="text" class="form-control" placeholder="코드를 입력해주세요.">
-                    <button type="submit" class="btn btn-secondary">확인하기</button>
-                </div>
-            </form>
         </div>
-
-
-        <div class="form-floating">
-            <input type="email" class="form-control" id="floatingInput" placeholder="name@example.com">
-            <label for="floatingInput">이메일(name@example.com)</label>
-        </div>
-        <div class="form-floating">
-            <input type="password" class="form-control" id="floatingPassword" placeholder="Password">
-            <label for="floatingPassword">비밀번호(Password)</label>
-        </div>
-
-        <div class="form-check text-start my-3">
-            <input class="form-check-input" type="checkbox" value="remember-me" id="flexCheckDefault">
-            <label class="form-check-label" for="flexCheckDefault">
-                아이디 저장
-            </label>
-        </div>
-        <div class="d-grid gap-2">
-            <button class="btn btn-primary w-100 py-2" type="submit">로그인</button>
-            <button class="btn btn-outline-secondary w-100 py-sm-1" type="button"
-                    onclick="goToMemberJoinPage()">회원가입</button>
-        </div>
+        <hr class="my-4">
+        <button class="btn btn-primary w-100 py-2" type="submit">회원가입</button>
         <p class="mt-5 mb-3 text-body-secondary">&copy; Groupware for Study</p>
     </form>
 </main>
@@ -235,14 +228,25 @@
 <script>
     /* 전역변수 선언 */
     const logo = document.getElementById("memberJoin");
-    const emailExample = document.getElementById("email_example");
-    const emailCheckBtn = document.getElementById("emailCheckBtn");
     const rewriteBtn = document.getElementById("rewriteBtn");
+    const emailCheckBtn = document.getElementById("emailCheckBtn");
+    const emailExample = document.getElementById("emailExample");
     const emailCodeCheckDiv = document.getElementById("emailCodeCheckDiv");
-
+    const emailCodeCheckBtn = document.getElementById("emailCodeCheckBtn");
+    const passwordCheck = document.getElementById("passwordCheck");
+    const memberNumber = document.getElementById("memberNumber");
+    let emailValidation = false;
+    let passwordValidation = false;
+    let emailCode = "";
 
 
     /* Listener control Area */
+    // 휴대폰번호 - 넣기
+    memberNumber.addEventListener("keyup", memberNumberProcess);
+    //비밀번호 확인하기
+    passwordCheck.addEventListener("keyup", passwordCheckProcess);
+    // 이메일 인증 코드 확인하기
+    emailCodeCheckBtn.addEventListener("click", emailCodeCheck);
     // 다시 작성하기 버튼 클릭
     rewriteBtn.addEventListener("click", emailRewrite);
     // 이메일 확인 코드 보내기 버튼
@@ -259,25 +263,88 @@
     }
 
     /* Function Area */
+    // 휴대폰번호 하이픈 넣기
+    function memberNumberProcess(){
+        let memberNumber = document.getElementById("memberNumber");
+        memberNumber.value = memberNumber.value
+                                .replace(/[^0-9]/g, "") //숫자 제외 모든 문자 제거
+                                .replace(/(^01[0-9]{1})(\\?[0-9]{3,4})(\\?[0-9]{4})$/, "$1-$2-$3");
+    }
+    // 비밀번호 확인하기
+    function passwordCheckProcess(){
+        let password = document.getElementById("password");
+        let passwordCheck = document.getElementById("passwordCheck");
+        let passwordCheckInfo = document.getElementById("passwordCheckInfo");
+        passwordValidation = (password.value === passwordCheck.value);
+        if(passwordValidation){
+            passwordCheckInfo.style.color='blue';
+            passwordCheckInfo.innerText = "*비밀번호가 일치합니다.";
+        } else {
+            passwordCheckInfo.style.color='red';
+            passwordCheckInfo.innerText = "*비밀번호가 일치하지 않습니다.";
+        }
+    }
+    // 이메일 코드 인증 확인하기
+    function emailCodeCheck(){
+        const emailCodeInput = document.getElementById("emailCodeInput");
+        emailValidation = (emailCodeInput.value === emailCode);
+        emailValidationSuccessOrNot(emailValidation);
+    }
+    // 이메일 인증 성공/실패에 따른 div 설정
+    function emailValidationSuccessOrNot(success){
+        if ( success ) {
+            emailCheckBtn.innerText = "인증이 완료되었습니다.";
+
+            rewriteBtn.style.display = "none";
+            emailCodeCheckDiv.style.display = "none";
+        } else {
+            alert("입력하신 코드는 보내드린 이메일 인증 코드와 맞지 않습니다.\n다시 시도 해주시기 바랍니다.");
+            emailRewrite();
+        }
+    }
+    // (ajax)이메일 확인 코드 보내기
+    function ajaxWhatEmailSend(){
+        const emailId = document.getElementById("emailId");
+        const emailAddress = document.getElementById("emailAddress");
+        let object = {};
+        let xhr = new XMLHttpRequest();
+
+        xhr.onreadystatechange = function(){
+            if (xhr.readyState === XMLHttpRequest.DONE) {
+                if (xhr.status === 200) {
+                    //성공
+                    emailCode = xhr.response;
+                } else {
+                    alert("이메일 전송 중 오류가 발생하였습니다.");
+                    emailRewrite();
+                }
+            }
+        }
+
+        object['emailId'] = emailId.value;
+        object['emailAddress'] = emailAddress.value;
+        // 객체 > JSON 문자열
+        const params = JSON.stringify(object);
+
+        xhr.open('POST', '/email/check', true);
+        xhr.setRequestHeader('Content-Type', 'application/json');
+        xhr.send(params);
+    }
     // 이메일 확인 코드 보내기
     function emailCheckProcess(){
         if ( emailValueCheck() ) {
-            rewriteBtn.style.display = "block";
-            emailCodeCheckDiv.style.display = "block";
+            rewriteBtn.style.display = "";
+            emailCodeCheckDiv.style.display = "";
 
+            ajaxWhatEmailSend();
         }
-    }
-    // 이메일 다시 작성하기
-    function emailRewrite(){
-        emailInitialSetting();
     }
     // 이메일 유효성 체크
     function emailValueCheck(){
-        const emailId = document.getElementById("email_id");
-        const emailAddress = document.getElementById("email_address");
-        const emailExample = document.getElementById("email_example");
+        const emailId = document.getElementById("emailId");
+        const emailAddress = document.getElementById("emailAddress");
+        const emailExample = document.getElementById("emailExample");
         if (emailId.value != "" && emailAddress.value != "") {
-            //위 주소의 이메일에서 확인하시기 바랍니다.
             emailCheckBtn.innerHTML = "이메일로 확인 코드를 보냈습니다.";
             emailCheckBtn.disabled = true;
             emailExample.disabled = true;
@@ -291,10 +358,15 @@
             return false;
         }
     }
+    // 이메일 다시 작성하기
+    function emailRewrite(){
+        emailInitialSetting();
+    }
     // 이메일 초기 세팅
     function emailInitialSetting(){
-        const emailId = document.getElementById("email_id");
-        const emailExample = document.getElementById("email_example");
+        const emailId = document.getElementById("emailId");
+        const emailExample = document.getElementById("emailExample");
+        const emailCodeInput = document.getElementById("emailCodeInput");
 
         rewriteBtn.style.display = "none";
         emailCodeCheckDiv.style.display = "none";
@@ -303,18 +375,21 @@
         emailCheckBtn.innerText = "확인 코드 보내기";
         emailId.disabled = false;
         emailExample.disabled = false;
+
+        emailCodeInput.value = "";
+
         selectBoxChange();
     }
     // 이메일 주소 고르기
     function selectBoxChange(){
-        const email_address = document.getElementById("email_address");
+        const emailAddress = document.getElementById("emailAddress");
         let value = emailExample.value;
         if ( value == 'none') {
-            email_address.disabled = false;
-            email_address.value = "";
+            emailAddress.disabled = false;
+            emailAddress.value = "";
         } else {
-            email_address.disabled = true;
-            email_address.value = emailExample.value;
+            emailAddress.disabled = true;
+            emailAddress.value = emailExample.value;
         }
     }
     //이미지 변경 함수
