@@ -1,0 +1,268 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en" data-bs-theme="auto">
+  <head>
+    <!--<script src="../assets/js/color-modes.js"></script>-->
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="Mark Otto, Jacob Thornton, and Bootstrap contributors">
+    <meta name="generator" content="Hugo 0.115.4">
+    <title>이메일/비밀번호찾기</title>
+
+    <link rel="canonical" href="https://getbootstrap.com/docs/5.3/examples/sign-in/">
+    <link rel="icon" type="image/x-icon" href="/images/favicon.svg">
+    <!--<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@docsearch/css@3">-->
+
+<link href="/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+      .bd-placeholder-img {
+        font-size: 1.125rem;
+        text-anchor: middle;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        user-select: none;
+      }
+
+      @media (min-width: 768px) {
+        .bd-placeholder-img-lg {
+          font-size: 3.5rem;
+        }
+      }
+
+      .b-example-divider {
+        width: 100%;
+        height: 3rem;
+        background-color: rgba(0, 0, 0, .1);
+        border: solid rgba(0, 0, 0, .15);
+        border-width: 1px 0;
+        box-shadow: inset 0 .5em 1.5em rgba(0, 0, 0, .1), inset 0 .125em .5em rgba(0, 0, 0, .15);
+      }
+
+      .b-example-vr {
+        flex-shrink: 0;
+        width: 1.5rem;
+        height: 100vh;
+      }
+
+      .bi {
+        vertical-align: -.125em;
+        fill: currentColor;
+      }
+
+      .nav-scroller {
+        position: relative;
+        z-index: 2;
+        height: 2.75rem;
+        overflow-y: hidden;
+      }
+
+      .nav-scroller .nav {
+        display: flex;
+        flex-wrap: nowrap;
+        padding-bottom: 1rem;
+        margin-top: -1px;
+        overflow-x: auto;
+        text-align: center;
+        white-space: nowrap;
+        -webkit-overflow-scrolling: touch;
+      }
+
+      .btn-bd-primary {
+        --bd-violet-bg: #712cf9;
+        --bd-violet-rgb: 112.520718, 44.062154, 249.437846;
+
+        --bs-btn-font-weight: 600;
+        --bs-btn-color: var(--bs-white);
+        --bs-btn-bg: var(--bd-violet-bg);
+        --bs-btn-border-color: var(--bd-violet-bg);
+        --bs-btn-hover-color: var(--bs-white);
+        --bs-btn-hover-bg: #6528e0;
+        --bs-btn-hover-border-color: #6528e0;
+        --bs-btn-focus-shadow-rgb: var(--bd-violet-rgb);
+        --bs-btn-active-color: var(--bs-btn-hover-color);
+        --bs-btn-active-bg: #5a23c8;
+        --bs-btn-active-border-color: #5a23c8;
+      }
+      .bd-mode-toggle {
+        z-index: 1500;
+      }
+     .popup {
+       width: 300px;
+       height: 200px;
+       background-color: #fff;
+       border: 1px solid #ccc;
+       border-radius: 5px;
+       padding: 20px;
+       position: fixed;
+       top: 50%;
+       left: 50%;
+       transform: translate(-50%, -50%);
+     }
+     .infoMessage{
+       font-size: small;
+       color: #bb2d3b;
+     }
+    </style>
+
+    
+    <!-- Custom styles for this template -->
+    <link href="/css/sign-in.css" rel="stylesheet">
+  </head>
+  <body class="d-flex align-items-center py-4 bg-body-tertiary">
+
+<main class="form-signin w-100 m-auto">
+  <form>
+    <img class="mb-4" src="/images/login/search.svg" alt="" width="42" height="27" id="loginLogo">
+    <h3 class="h5 mb-3 fw-normal">선택해주세요.</h3>
+    <div class="d-flex gap-2 justify-content-center py-1">
+      <button class="btn btn-outline-secondary d-inline-flex align-items-center" id="forgetEmailBtn" type="button">이메일 찾기➡️</button>
+      <button class="btn btn-outline-secondary d-inline-flex align-items-center" id="forgetPasswordBtn" type="button">비밀번호 찾기➡️</button>
+    </div>
+    <div id="infoMessage" class="infoMessage"></div>
+
+    <div id="forgetEmail" style="display: none">
+      <div class="form-floating">
+        <input type="text" class="form-control" id="memberName" name="memberName" placeholder="홍길동">
+        <label for="memberName">이름(홍길동)</label>
+      </div>
+      <div class="form-floating">
+        <input type="text" class="form-control" id="memberNumber1" name="memberNumber" placeholder="010-9999-8888" maxlength="13">
+        <label for="memberNumber1">휴대폰번호(01012345678)</label>
+      </div>
+      <div class="d-flex gap-2 justify-content-center py-3">
+        <button class="btn btn-outline-success d-inline-flex align-items-center" name="findBtn" type="button">찾기➡</button>
+      </div>
+    </div>
+
+    <div id="forgetPassword" style="display: none">
+      <div class="form-floating">
+        <input type="text" class="form-control" id="email" name="email" placeholder="email@example.com">
+        <label for="email">이메일(email@example.com)</label>
+      </div>
+      <div class="form-floating">
+        <input type="text" class="form-control" id="memberNumber2" name="memberNumber" placeholder="010-9999-8888" maxlength="13">
+        <label for="memberNumber2">휴대폰번호(01012345678)</label>
+      </div>
+      <div class="d-flex gap-2 justify-content-center py-3">
+        <button class="btn btn-outline-success d-inline-flex align-items-center" name="findBtn" type="button">찾기➡</button>
+      </div>
+    </div>
+
+    <div class="d-flex gap-2 justify-content-center py-3">
+      <button class="btn btn-outline-danger rounded-circle p-2 lh-1 align-items-center" type="button" onclick="popupClose()">❌</button>
+    </div>
+    <p class="mt-4 mb-2 text-body-secondary">&copy; Groupware for Study</p>
+  </form>
+</main>
+<script src="/js/bootstrap.bundle.min.js"></script>
+<script>
+  /* 전역변수 설정 */
+  const forgetEmailDiv = document.getElementById("forgetEmail");
+  const forgetPasswordDiv = document.getElementById("forgetPassword");
+  const forgetEmailBtn = document.getElementById("forgetEmailBtn");
+  const forgetPasswordBtn = document.getElementById("forgetPasswordBtn");
+  const findBtn = document.getElementsByName("findBtn");
+  let memberNumbers = document.getElementsByName("memberNumber");
+
+  /* EventListener Control Area */
+  // 이메일/비밀번호 찾기 버튼 클릭
+  findBtn.forEach(function(m){m.addEventListener("click", findEmailPasswordProcess)});
+  //div 표출 수정(1)
+  forgetEmailBtn.addEventListener("click", showAndHideDiv);
+  //div 표출 수정(2)
+  forgetPasswordBtn.addEventListener("click", showAndHideDiv);
+  //휴대폰 번호 정규식 적용
+  memberNumbers.forEach(function(m){m.addEventListener('keyup', memberNumberProcess)});
+
+  /* Document.ready */
+  window.onload = function(){
+
+  };
+
+  /* Function Area */
+  // 이메일, 비밀번호 찾기 프로세스
+  function findEmailPasswordProcess(){
+    if ( validation(this) ){
+      let object = {};
+      let xhr = new XMLHttpRequest();
+
+      xhr.onreadystatechange = function(){
+        if (xhr.readyState === XMLHttpRequest.DONE) {
+          if (xhr.status === 200) {
+            const infoMessage = document.getElementById("infoMessage");
+            infoMessage.innerText = xhr.response;
+          } else {
+              alert("검색 중 오류가 발생하였습니다.");
+              window.location.reload();
+          }
+        }
+      }
+      const inputs = this.parentElement.parentElement.querySelectorAll('input');
+      inputs.forEach(function(m){
+        const dtoName = m.name;
+        object[dtoName] = m.value;
+      });
+      // 객체 > JSON 문자열
+      const params = JSON.stringify(object);
+
+      xhr.open('POST', '/forget', true);
+      xhr.setRequestHeader('Content-Type', 'application/json');
+      xhr.send(params);
+    }
+  }
+  // 유효성 체크
+  function validation(object){
+    const inputs = object.parentElement.parentElement.querySelectorAll('input');
+    let flag = true;
+    inputs.forEach((m)=>{
+      if ( m.value === ''){
+        flag = false;
+      }
+    });
+    if (!flag) alert("빈칸을 채워주세요.");
+    return flag;
+  }
+  // 아이디 비밀번호 Show and Hide
+  function showAndHideDiv(){
+    if( this.id === 'forgetEmailBtn' ) {
+      forgetEmailBtn.classList.add('active');
+      forgetPasswordBtn.classList.remove('active');
+      forgetEmailDiv.style.display = "block";
+      forgetPasswordDiv.style.display = "none";
+      forgetPasswordDiv.querySelectorAll('input').forEach(function(m){
+        m.value='';
+      });
+    } else {
+      forgetPasswordBtn.classList.add('active');
+      forgetEmailBtn.classList.remove('active');
+      forgetEmailDiv.style.display = "none";
+      forgetPasswordDiv.style.display = "block";
+      forgetEmailDiv.querySelectorAll('input').forEach(function(m){
+        m.value='';
+      });
+    }
+  }
+  // 휴대폰번호 하이픈 넣기
+  function memberNumberProcess(){
+    let memberNumbers = document.getElementsByName("memberNumber");
+    memberNumbers.forEach(function (memberNumber) {
+      memberNumber.value = memberNumber.value
+                                        .replace(/[^0-9]/g, "") //숫자 제외 모든 문자 제거
+                                        .replace(/(^01[0-9]{1})(\\?[0-9]{3,4})(\\?[0-9]{4})$/, "$1-$2-$3");
+    });
+
+  }
+  // 팝업창 열기
+  function openPopup(){
+    const popupUrl = "/forget";
+    const width = 300, height = 250, left = (window.innerWidth - width)/2, top=(window.innerHeight-height)/2;
+    window.open(popupUrl, "_blank", "width=" + width + ",height=" + height + ",left=" + left + ",top=" + top);
+  }
+
+  function popupClose(){
+    window.close();
+  }
+</script>
+    </body>
+</html>
