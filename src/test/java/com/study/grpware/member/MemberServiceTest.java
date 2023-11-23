@@ -4,6 +4,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -18,19 +19,22 @@ class MemberServiceTest {
 
     @Autowired MemberRepository memberRepository;
 
+    @Autowired PasswordEncoder passwordEncoder;
+
     @Test
     @DisplayName("임시 비밀번호 불일치 테스트")
     void tmpPasswordTest(){
         // 회원가입 양식으로 회원가입 함
-        MemberFormDto dto1 = createMemberForm();
-        MemberFormDto newDto1 = memberService.registerMember(dto1);
+        Member dto1 = createMemberForm();
+        MemberFormDto formDto1 = MemberFormDto.of(dto1);
+        MemberFormDto newDto1 = memberService.registerMember(formDto1, passwordEncoder);
 
         // 방금 가입한 회원을 이메일로 검색
         Member origin = memberRepository.findByEmail(newDto1.getEmailId() + newDto1.getEmailAddress());
         MemberDto ori = MemberDto.of(origin);
 
         // 비밀번호 찾으면서 변경
-        MemberDto byEmail = memberService.findByEmailAndNumber(ori);
+        MemberDto byEmail = memberService.findByEmailAndNumber(ori, passwordEncoder);
 
         // 아이디, 이메일 등 다 같으나
         assertEquals(byEmail.getEmail(), ori.getEmail());
@@ -45,12 +49,14 @@ class MemberServiceTest {
     @Test
     @DisplayName("회원 중복 테스트")
     void findMember() {
-        MemberFormDto dto1 = createMemberForm();
-        MemberFormDto dto2 = createMemberForm();
-        MemberFormDto savedDto = memberService.registerMember(dto1);
+        Member member1 = createMemberForm();
+        Member member2 = createMemberForm();
+        MemberFormDto formDto1 = MemberFormDto.of(member1);
+        MemberFormDto formDto2 = MemberFormDto.of(member2);
+        MemberFormDto savedDto1 = memberService.registerMember(formDto1, passwordEncoder);
 
         Throwable e = assertThrows(IllegalStateException.class, () -> {
-            memberService.registerMember(dto2);
+            memberService.registerMember(formDto2, passwordEncoder);
         });
 
         assertEquals("이미 가입된 회원입니다.", e.getMessage());
@@ -59,20 +65,17 @@ class MemberServiceTest {
     @Test
     @DisplayName("회원 등록 테스트")
     void registerMember() {
-        MemberFormDto dto = createMemberForm();
-        MemberFormDto savedMember = memberService.registerMember(dto);
+        Member member = createMemberForm();
+        Member savedMember = memberRepository.save(member);
 
-        assertEquals(dto.getEmailId(), savedMember.getEmailId());
-        assertEquals(dto.getEmailAddress(), savedMember.getEmailAddress());
-        assertEquals(dto.getPassword(), savedMember.getPassword());
-        assertEquals(dto.getMemberName(), savedMember.getMemberName());
-        assertEquals(dto.getMemberNumber(), savedMember.getMemberNumber());
-        assertEquals(dto.getBirthYYYY(), savedMember.getBirthYYYY());
-        assertEquals(dto.getBirthMM(), savedMember.getBirthMM());
-        assertEquals(dto.getBirthDD(), savedMember.getBirthDD());
+        assertEquals(member.getEmail(), savedMember.getEmail());
+        assertEquals(member.getPassword(), savedMember.getPassword());
+        assertEquals(member.getMemberName(), savedMember.getMemberName());
+        assertEquals(member.getMemberNumber(), savedMember.getMemberNumber());
+        assertEquals(member.getRole(), savedMember.getRole());
     }
 
-    private static MemberDto createMember(){
+    private MemberDto createMember(){
         MemberDto memberDto = new MemberDto();
         memberDto.setEmail("email@address");
         memberDto.setPassword("1234");
@@ -82,7 +85,7 @@ class MemberServiceTest {
         return memberDto;
     }
 
-    private static MemberFormDto createMemberForm(){
+    private Member createMemberForm(){
         MemberFormDto memberFormDto = new MemberFormDto();
         memberFormDto.setEmailId("email");
         memberFormDto.setEmailAddress("@address");
@@ -92,6 +95,6 @@ class MemberServiceTest {
         memberFormDto.setBirthYYYY("1994");
         memberFormDto.setBirthMM("06");
         memberFormDto.setBirthDD("14");
-        return memberFormDto;
+        return Member.createMember(memberFormDto, passwordEncoder);
     }
 }

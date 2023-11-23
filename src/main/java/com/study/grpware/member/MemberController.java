@@ -2,6 +2,7 @@ package com.study.grpware.member;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -16,6 +17,7 @@ import javax.validation.Valid;
 @Slf4j
 public class MemberController {
     private final MemberService memberService;
+    private final PasswordEncoder passwordEncoder;
 
     @GetMapping("/memberJoin")
     public String goToMemberJoinPage(Model model){
@@ -29,7 +31,7 @@ public class MemberController {
             return "member/memberJoinForm";
         }
         try {
-            MemberFormDto savedDto = memberService.registerMember(memberFormDto);
+            MemberFormDto savedDto = memberService.registerMember(memberFormDto, passwordEncoder);
         } catch (IllegalStateException e) {
             model.addAttribute("errorMessage", e.getMessage());
             return "member/memberJoinForm";

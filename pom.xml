@@ -97,6 +97,16 @@
             <artifactId>querydsl-core</artifactId>
             <version>4.3.1</version>
         </dependency>
+        <!-- 스프링 시큐리티 추가 (이후 모든 요청은 인증을 필요로 함) -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-security</artifactId>
+        </dependency>
+        <!-- 화면 없이 시큐리티 테스트 -->
+        <dependency>
+            <groupId>org.springframework.security</groupId>
+            <artifactId>spring-security-test</artifactId>
+        </dependency>
     </dependencies>
 
     <build>

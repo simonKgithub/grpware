@@ -4,6 +4,7 @@ import com.study.grpware.member.MemberDto;
 import com.study.grpware.member.MemberService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -17,9 +18,16 @@ import org.springframework.web.bind.annotation.ResponseBody;
 public class LoginController {
 
     private final MemberService memberService;
+    private final PasswordEncoder passwordEncoder;
 
     @GetMapping("/login")
     public String goToLoginPage(Model model){
+        return "login/loginPage";
+    }
+
+    @GetMapping("/login/error")
+    public String goToLoginPageWithError(Model model){
+        model.addAttribute("loginErrorMsg", "아이디 또는 비밀번호를 확인해주세요.");
         return "login/loginPage";
     }
 
@@ -45,7 +53,7 @@ public class LoginController {
             //비밀번호 찾기
             else if (memberDto.getEmail() != null) {
                 try {
-                    MemberDto byEmail = memberService.findByEmailAndNumber(memberDto);
+                    MemberDto byEmail = memberService.findByEmailAndNumber(memberDto, passwordEncoder);
                     msg = "임시 비밀번호가 발급되었습니다.\n이메일을 확인해주세요.";
                 } catch (IllegalStateException e) {
                     return e.getMessage();

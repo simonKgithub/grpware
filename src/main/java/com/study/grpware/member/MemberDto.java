@@ -1,5 +1,6 @@
 package com.study.grpware.member;
 
+import com.study.grpware.constant.Role;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -25,10 +26,9 @@ public class MemberDto {
     @NotBlank(message = "*생년월일을 입력해주세요.")
     private String memberBirth;
 
-    private static ModelMapper modelMapper = new ModelMapper();
+    private Role role;
 
-    public Member to(){
-        return modelMapper.map(this, Member.class);}
+    private static ModelMapper modelMapper = new ModelMapper();
 
     public static MemberDto of(Member member) {
         return modelMapper.map(member, MemberDto.class);

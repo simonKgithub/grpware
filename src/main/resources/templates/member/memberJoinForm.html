@@ -5,7 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="description" content="">
     <meta name="author" content="Mark Otto, Jacob Thornton, and Bootstrap contributors">
-    <meta name="generator" content="Hugo 0.115.4">
+    <meta name="_csrf" th:content="${_csrf.token}">
+    <meta name="_csrf_header" th:content="${_csrf.headerName}">
     <title>회원가입</title>
 
     <link rel="canonical" href="https://getbootstrap.com/docs/5.3/examples/sign-in/">
@@ -164,6 +165,7 @@
             <button class="btn btn-outline-secondary w-100 py-sm-1" type="button" id="goToLoginBtn" onclick="goToLoginPage()">돌아가기</button>
         </div>
         <p class="mt-5 mb-3 text-body-secondary">&copy; Groupware for Study</p>
+        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
     </form>
 </main>
 <script src="/js/bootstrap.bundle.min.js"></script>
@@ -298,6 +300,8 @@
     }
     // (ajax)이메일 확인 코드 보내기
     function ajaxWhatEmailSend(){
+        const csrfToken = document.querySelector('meta[name="_csrf"]').getAttribute("content");
+        const csrfHeader = document.querySelector('meta[name="_csrf_header"]').getAttribute("content");
         const emailId = document.getElementById("emailId");
         const emailAddress = document.getElementById("emailAddress");
         let object = {};
@@ -321,6 +325,7 @@
         const params = JSON.stringify(object);
 
         xhr.open('POST', '/email/check', true);
+        xhr.setRequestHeader(csrfHeader, csrfToken);
         xhr.setRequestHeader('Content-Type', 'application/json');
         xhr.send(params);
     }

@@ -1,13 +1,19 @@
 package com.study.grpware.member;
 
-import com.study.grpware.util.email.EmailDto;
 import com.study.grpware.util.email.EmailService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
+@Transactional
 @RequiredArgsConstructor
-public class MemberService {
+public class MemberService implements UserDetailsService {
 
     private final MemberRepository memberRepository;
     private final EmailService emailService;
@@ -17,8 +23,8 @@ public class MemberService {
      * @param memberFormDto
      * @return MemberFormDto
      */
-    public MemberFormDto registerMember(MemberFormDto memberFormDto) {
-        Member member = MemberFormDto.to(memberFormDto);
+    public MemberFormDto registerMember(MemberFormDto memberFormDto, PasswordEncoder passwordEncoder) {
+        Member member = Member.createMember(memberFormDto, passwordEncoder);
         validateDuplicationMember(member);
         Member savedMember = memberRepository.save(member);
         return MemberFormDto.of(savedMember);
@@ -42,14 +48,15 @@ public class MemberService {
      * @param memberDto email, memberNumber
      * @return memberDto
      */
-    public MemberDto findByEmailAndNumber(MemberDto memberDto) {
+    public MemberDto findByEmailAndNumber(MemberDto memberDto, PasswordEncoder passwordEncoder) {
         Member byEmail = memberRepository.findByEmailAndMemberNumber(memberDto.getEmail(), memberDto.getMemberNumber());
         if (byEmail == null) {
             throw new IllegalStateException("등록된 회원 정보가 없습니다.");
         }
 
-        String tmpPassword = emailService.emailPassword(byEmail.getEmail());
         // 비밀번호 변경
+        String tmpPassword = emailService.emailPassword(byEmail.getEmail());
+        tmpPassword = passwordEncoder.encode(tmpPassword);
         byEmail.setPassword(tmpPassword);
         Member savedMember = memberRepository.save(byEmail);
         return MemberDto.of(savedMember);
@@ -64,5 +71,24 @@ public class MemberService {
         if (dbMember != null) {
             throw new IllegalStateException("이미 가입된 회원입니다.");
         }
+    }
+
+    /**
+     * 스프링 시큐리티 - 로그인
+     * @param email
+     * @return User (스프링 제공)
+     * @throws UsernameNotFoundException
+     */
+    @Override
+    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
+        Member byEmail = memberRepository.findByEmail(email);
+        if (byEmail == null) {
+            throw new UsernameNotFoundException(email);
+        }
+        return User.builder()
+                .username(byEmail.getEmail())
+                .password(byEmail.getPassword())
+                .roles(byEmail.getRole().toString())
+                .build();
     }
 }

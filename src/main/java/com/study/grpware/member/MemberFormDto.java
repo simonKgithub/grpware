@@ -1,8 +1,11 @@
 package com.study.grpware.member;
 
+import com.study.grpware.constant.Role;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
+import org.hibernate.validator.constraints.Length;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import javax.validation.constraints.NotBlank;
 
@@ -24,23 +27,18 @@ public class MemberFormDto {
     private String memberNumber;
 
     @NotBlank(message = "*입력필요")
+    @Length(max = 4)
     private String birthYYYY;
 
     @NotBlank(message = "*입력필요")
+    @Length(max=2)
     private String birthMM;
 
     @NotBlank(message = "*입력필요")
+    @Length(max=2)
     private String birthDD;
 
-    public static Member to(MemberFormDto memberFormDto) {
-        Member member = new Member();
-        member.setEmail(memberFormDto.getEmailId() + memberFormDto.getEmailAddress());
-        member.setPassword(memberFormDto.getPassword());
-        member.setMemberName(memberFormDto.getMemberName());
-        member.setMemberNumber(memberFormDto.getMemberNumber());
-        member.setMemberBirth(memberFormDto.getBirthYYYY() + "-" + memberFormDto.getBirthMM() + "-" + memberFormDto.getBirthDD());
-        return member;
-    }
+    private Role role;
 
     public static MemberFormDto of(Member member) {
         MemberFormDto memberFormDto = new MemberFormDto();
