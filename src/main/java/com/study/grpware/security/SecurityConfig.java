@@ -7,6 +7,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -31,6 +32,20 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .logout()
                 .logoutRequestMatcher(new AntPathRequestMatcher("/logout")) //로그아웃 url
                 .logoutSuccessUrl("/login");    //로그아웃 성공 시 이동 url
+
+        http.authorizeRequests() //시큐리티 처리에 HttpServletRequest 이용
+                .mvcMatchers("/login", "/login/error",
+                                      "/member/memberJoin", "/forget", "/email/check").permitAll()
+                .mvcMatchers("/admin/**").hasRole("ADMIN")
+                .anyRequest().authenticated();
+
+        http.exceptionHandling() //인증되지 않은 사용자의 리소스 접근 시 수행되는 핸들러
+                .authenticationEntryPoint(new GrpAuthenticationEntryPoint());
+    }
+
+    @Override
+    public void configure(WebSecurity webSecurity) throws Exception {
+        webSecurity.ignoring().antMatchers("/css/**", "/js/**", "/images/**");
     }
 
     @Bean

@@ -27,7 +27,7 @@ public class LoginController {
 
     @GetMapping("/login/error")
     public String goToLoginPageWithError(Model model){
-        model.addAttribute("loginErrorMsg", "아이디 또는 비밀번호를 확인해주세요.");
+        model.addAttribute("loginErrorMsg", "이메일 또는 비밀번호를 확인해주세요.");
         return "login/loginPage";
     }
 

@@ -1,10 +1,8 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>메인화면</title>
-</head>
-<body>
-    메인화면 입니당그리그리
-</body>
-</html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+        layout:decorate="~{layouts/lauout}">
+
+    <div layout:fragment="content">
+        메인화면입니당그리그리
+    </div>

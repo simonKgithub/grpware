@@ -101,10 +101,6 @@
        left: 50%;
        transform: translate(-50%, -50%);
      }
-     .infoMessage{
-       font-size: small;
-       color: #bb2d3b;
-     }
     </style>
 
     
@@ -121,7 +117,7 @@
       <button class="btn btn-outline-secondary d-inline-flex align-items-center" id="forgetEmailBtn" type="button">이메일 찾기➡️</button>
       <button class="btn btn-outline-secondary d-inline-flex align-items-center" id="forgetPasswordBtn" type="button">비밀번호 찾기➡️</button>
     </div>
-    <div id="infoMessage" class="infoMessage"></div>
+    <div id="infoMessage" class="alert alert-success" role="alert" style="font-size: small;" hidden="hidden"></div>
 
     <div id="forgetEmail" style="display: none">
       <div class="form-floating">
@@ -189,17 +185,20 @@
     if ( validation(this) ){
       const csrfToken = document.querySelector('meta[name="_csrf"]').getAttribute("content");
       const csrfHeader = document.querySelector('meta[name="_csrf_header"]').getAttribute("content");
+      const infoMessage = document.getElementById("infoMessage");
       let object = {};
       let xhr = new XMLHttpRequest();
 
       xhr.onreadystatechange = function(){
         if (xhr.readyState === XMLHttpRequest.DONE) {
           if (xhr.status === 200) {
-            const infoMessage = document.getElementById("infoMessage");
+            infoMessage.hidden = false;
             infoMessage.innerText = xhr.response;
+            //console.log(xhr.response);
           } else {
-              alert("검색 중 오류가 발생하였습니다.");
-              window.location.reload();
+            alert('검색 도중 오류가 발생하였습니다.');
+            console.log(xhr.response);
+            window.location.reload();
           }
         }
       }
@@ -231,6 +230,7 @@
   }
   // 아이디 비밀번호 Show and Hide
   function showAndHideDiv(){
+    document.getElementById("infoMessage").hidden=true;
     if( this.id === 'forgetEmailBtn' ) {
       forgetEmailBtn.classList.add('active');
       forgetPasswordBtn.classList.remove('active');

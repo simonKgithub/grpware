@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+    <div th:fragment="footer">
+        <nav class="navbar fixed-bottom bg-body-tertiary">
+            <div class="container-fluid">
+                <div>
+                    <span class="navbar-text" data-bs-toggle="offcanvas" data-bs-target="#offcanvasBottom" aria-controls="offcanvasBottom">
+                        멤버들의 블로그
+                    </span>
+                </div>
+                <a class="navbar-brand" href="/">
+                    <p class="mt-1 mb-1 text-body-tertiary" style="font-size: xx-small;">&copy; Groupware for Study</p>
+                </a>
+            </div>
+        </nav>
+
+        <!-- 아래쪽 오프캔버스 -->
+        <div class="offcanvas offcanvas-bottom" tabindex="-1" id="offcanvasBottom" aria-labelledby="offcanvasBottomLabel">
+            <div class="offcanvas-header">
+                <h5 class="offcanvas-title" id="offcanvasBottomLabel">Offcanvas bottom</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+            </div>
+            <div class="offcanvas-body small">
+                고용수
+            </div>
+            <div class="offcanvas-body small">
+                김연세
+            </div>
+        </div>
+    </div>
+
+</html>

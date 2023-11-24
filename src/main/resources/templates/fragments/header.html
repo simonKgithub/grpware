@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+>
+<div th:fragment="header">
+    <nav class="navbar navbar-expand-lg bg-body-tertiary">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="/">
+                <img src="/images/main/intersect.svg" alt="" width="52" height="37" class="d-inline-block align-text-top">
+                Study Groupware
+            </a>
+            <a class="navbar-brand" href="#">
+                <span class="navbar-text" data-bs-toggle="offcanvas" data-bs-target="#offcanvasWithBothOptions" aria-controls="offcanvasWithBothOptions">
+                    Log-in<img src="/images/main/person-gear.svg" alt="" width="42" height="27">
+                </span>
+            </a>
+        </div>
+    </nav>
+    <!--오른쪽 오프캔버스-->
+    <div class="offcanvas offcanvas-end " data-bs-scroll="true" tabindex="-1" id="offcanvasWithBothOptions" aria-labelledby="offcanvasWithBothOptionsLabel">
+        <div class="offcanvas-header">
+            <h5 class="offcanvas-title" id="offcanvasWithBothOptionsLabel">Backdrop with scrolling</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+        </div>
+        <div class="offcanvas-body">
+            <p sec:authorize="isAuthenticated()"><a class="navbar-brand" href="/logout">로그아웃</a></p>
+            <p>사용자 설정 변경</p>
+            <p>내 블로그</p>
+        </div>
+    </div>
+</div>
+</html>

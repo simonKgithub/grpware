@@ -120,7 +120,8 @@
       <input type="password" class="form-control" id="password" name="password" placeholder="Password" autocomplete="password">
       <label for="password">비밀번호(password)</label>
     </div>
-    <p th:if="${loginErrorMsg}" class="error" th:text="${loginErrorMsg}"></p>
+    <div th:if="${loginErrorMsg}" class="alert alert-danger" role="alert" th:text="${loginErrorMsg}"  style="
+    font-size: small;"></div>
     <div class="form-check text-start my-3">
       <input class="form-check-input" type="checkbox" value="remember-me" id="flexCheckDefault">
       <label class="form-check-label" for="flexCheckDefault">

@@ -1,11 +1,13 @@
 package com.study.grpware.util.email;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Random;
 
 
 @Service
+@Transactional
 public class EmailService {
     /**
      * 참고블로그: https://blog.naver.com/indoubt/222901617791
