@@ -1,5 +1,6 @@
 package com.study.grpware.security;
 
+import com.study.grpware.constant.Role;
 import com.study.grpware.member.MemberService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,7 +36,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
         http.authorizeRequests() //시큐리티 처리에 HttpServletRequest 이용
                 .mvcMatchers("/login", "/login/error",
-                                      "/member/memberJoin", "/forget", "/email/check").permitAll()
+                        "/member/memberJoin", "/forget", "/email/check",
+                        "/css/**", "/js/**", "/images/**").permitAll()
                 .mvcMatchers("/admin/**").hasRole("ADMIN")
                 .anyRequest().authenticated();
 
@@ -45,7 +47,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     public void configure(WebSecurity webSecurity) throws Exception {
-        webSecurity.ignoring().antMatchers("/css/**", "/js/**", "/images/**");
+        /**
+         * 보안 상 권장하지 않아 주석 처리
+         * 및 http.authorizeRequests() 메서드 내 permitAll()로 선언
+         */
+        //webSecurity.ignoring().antMatchers("/css/**", "/js/**", "/images/**");
     }
 
     @Bean

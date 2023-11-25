@@ -85,10 +85,7 @@ public class MemberService implements UserDetailsService {
         if (byEmail == null) {
             throw new UsernameNotFoundException(email);
         }
-        return User.builder()
-                .username(byEmail.getEmail())
-                .password(byEmail.getPassword())
-                .roles(byEmail.getRole().toString())
-                .build();
+
+        return byEmail;
     }
 }

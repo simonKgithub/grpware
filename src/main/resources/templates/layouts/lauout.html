@@ -34,7 +34,7 @@
         //화면 크기 변경 시 사이드바 높이 조정(모바일버전)
         window.addEventListener('resize', function () {
             let sidebar = document.getElementById('sidebar');
-            if (window.innerWidth <= 768) {
+            if (window.innerWidth < 768) {
                 sidebar.style.height = '100%';
             } else {
                 sidebar.style.height = '90vh';
@@ -44,21 +44,22 @@
 </head>
 
 <body>
+    <!-- 헤더 -->
     <div th:replace="fragments/header::header"></div>
 
     <div class="container-fluid">
         <div class="row">
             <!-- 사이드바 -->
-            <div class="col-md-2 sidebar" id="sidebar">
+            <div class="col-md-3 sidebar" id="sidebar">
                 <div th:replace="fragments/sidebar::sidebar"></div>
             </div>
             <!-- 메인 콘텐츠 -->
-            <div class="col-md-10">
+            <div class="col-md-9">
                 <div layout:fragment="content"></div>
             </div>
         </div>
     </div>
-
+    <!-- 푸터 -->
     <div th:replace="fragments/footer::footer"></div>
 
 </body>

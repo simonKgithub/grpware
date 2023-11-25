@@ -11,7 +11,8 @@
             </a>
             <a class="navbar-brand" href="#">
                 <span class="navbar-text" data-bs-toggle="offcanvas" data-bs-target="#offcanvasWithBothOptions" aria-controls="offcanvasWithBothOptions">
-                    Log-in<img src="/images/main/person-gear.svg" alt="" width="42" height="27">
+                    <span th:text="${#authentication.getPrincipal().getMemberName()}" style="font-size: medium"></span>
+                    <img src="/images/main/person-lock.svg" alt="" width="42" height="27">
                 </span>
             </a>
         </div>
@@ -19,7 +20,9 @@
     <!--오른쪽 오프캔버스-->
     <div class="offcanvas offcanvas-end " data-bs-scroll="true" tabindex="-1" id="offcanvasWithBothOptions" aria-labelledby="offcanvasWithBothOptionsLabel">
         <div class="offcanvas-header">
-            <h5 class="offcanvas-title" id="offcanvasWithBothOptionsLabel">Backdrop with scrolling</h5>
+            <h5 class="offcanvas-title" id="offcanvasWithBothOptionsLabel">
+                <span th:text="${#authentication.getPrincipal().getMemberName()}"></span>님! 반가워요😊
+            </h5>
             <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
         </div>
         <div class="offcanvas-body">

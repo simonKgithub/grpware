@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
     <div th:fragment="sidebar" id="sidebar">
         <ul class="nav flex-column">
             <li class="nav-item">
@@ -8,8 +9,12 @@
             <li class="nav-item">
                 <a class="nav-link" href="#">메뉴 2</a>
             </li>
-            <li class="nav-item">
-                <a class="nav-link" href="#">메뉴 3</a>
+            <li class="nav-item"
+                sec:authorize="hasAnyAuthority('ROLE_ADMIN')">
+                <a class="nav-link" href="/admin/adminPage">
+                    <img src="/images/main/gear.svg" alt="" width="42" height="27" class="d-inline-block align-text-top">
+                    System Setting
+                </a>
             </li>
         </ul>
     </div>
