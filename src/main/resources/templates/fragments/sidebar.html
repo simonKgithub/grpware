@@ -2,6 +2,56 @@
 <html xmlns:th="http://www.thymeleaf.org"
       xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
     <div th:fragment="sidebar" id="sidebar">
+        <div class="flex-shrink-0 p-3">
+            <ul class="list-unstyled ps-0">
+                <li class="mb-1">
+                    <button class="btn btn-toggle d-inline-flex align-items-center rounded border-0 collapsed" data-bs-toggle="collapse" data-bs-target="#home-collapse" aria-expanded="false">
+                        Home
+                    </button>
+                    <div class="collapse show" id="home-collapse">
+                    </div>
+                </li>
+                <li class="mb-1">
+                    <button class="btn btn-toggle d-inline-flex align-items-center rounded border-0 collapsed" data-bs-toggle="collapse" data-bs-target="#dashboard-collapse" aria-expanded="false">
+                        Dashboard
+                    </button>
+                    <div class="collapse" id="dashboard-collapse">
+                        <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
+                            <li><a href="#" class="link-body-emphasis d-inline-flex text-decoration-none rounded">Overview</a></li>
+                            <li><a href="#" class="link-body-emphasis d-inline-flex text-decoration-none rounded">Weekly</a></li>
+                            <li><a href="#" class="link-body-emphasis d-inline-flex text-decoration-none rounded">Monthly</a></li>
+                            <li><a href="#" class="link-body-emphasis d-inline-flex text-decoration-none rounded">Annually</a></li>
+                        </ul>
+                    </div>
+                </li>
+                <li class="mb-1">
+                    <button class="btn btn-toggle d-inline-flex align-items-center rounded border-0 collapsed" data-bs-toggle="collapse" data-bs-target="#orders-collapse" aria-expanded="false">
+                        Orders
+                    </button>
+                    <div class="collapse" id="orders-collapse">
+                        <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
+                            <li><a href="#" class="link-body-emphasis d-inline-flex text-decoration-none rounded">New</a></li>
+                            <li><a href="#" class="link-body-emphasis d-inline-flex text-decoration-none rounded">Processed</a></li>
+                            <li><a href="#" class="link-body-emphasis d-inline-flex text-decoration-none rounded">Shipped</a></li>
+                            <li><a href="#" class="link-body-emphasis d-inline-flex text-decoration-none rounded">Returned</a></li>
+                        </ul>
+                    </div>
+                </li>
+                <li class="border-top my-3"></li>
+                <li class="mb-1">
+                    <button class="btn btn-toggle d-inline-flex align-items-center rounded border-0 collapsed" data-bs-toggle="collapse" data-bs-target="#account-collapse" aria-expanded="false">
+                        <img src="/images/main/gear.svg" alt="" width="32" height="17" class="d-inline-block align-text-top">
+                        Settings
+                    </button>
+                    <div class="collapse" id="account-collapse">
+                        <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
+                            <li><a href="/admin/announceWithPopup" class="link-body-emphasis d-inline-flex text-decoration-none rounded">Announce Popup</a></li>
+                        </ul>
+                    </div>
+                </li>
+            </ul>
+        </div>
+        <!--11111
         <ul class="nav flex-column">
             <li class="nav-item">
                 <a class="nav-link active" href="#">메뉴 1</a>
@@ -9,13 +59,23 @@
             <li class="nav-item">
                 <a class="nav-link" href="#">메뉴 2</a>
             </li>
-            <li class="nav-item"
-                sec:authorize="hasAnyAuthority('ROLE_ADMIN')">
-                <a class="nav-link" href="/admin/adminPage">
-                    <img src="/images/main/gear.svg" alt="" width="42" height="27" class="d-inline-block align-text-top">
-                    System Setting
-                </a>
-            </li>
-        </ul>
+            <div class="accordion" id="accordionExample" sec:authorize="hasAnyAuthority('ROLE_ADMIN')">
+                <div class="accordion-item">
+                    <h2 class="accordion-header">
+                        <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                            <img src="/images/main/gear.svg" alt="" width="42" height="27" class="d-inline-block align-text-top"> System Setting
+                        </button>
+                    </h2>
+                    <div id="collapseOne" class="accordion-collapse collapse show" data-bs-parent="#accordionExample">
+                        <div class="accordion-body">
+                            <a class="nav-link" href="/admin/announceWithPopup">공지 팝업 관리</a>
+                        </div>
+                        <div class="accordion-body">
+                            #2
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </ul>-->
     </div>
 </html>

@@ -12,8 +12,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @Slf4j
 @RequestMapping(value = "/admin")
 public class AdminController {
+
     @GetMapping("/adminPage")
     public String goToAdminPage(Model model){
         return "/admin/adminPage";
+    }
+
+    @GetMapping("/announceWithPopup")
+    public String goToPopupNoticePage(){
+        return "/admin/popupSettingPage";
     }
 }
