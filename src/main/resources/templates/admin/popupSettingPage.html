@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
         layout:decorate="~{layouts/lauout}">
+
     <div layout:fragment="content">
         <!-- head -->
         <nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
@@ -54,9 +55,15 @@
                             </div>
                             <div class="modal-body">
                                 <form>
+                                    <img class="mb-3" id="popupImagePreview" style="display: none;">
+                                        <div>이미지 미리보기</div>
+                                    </img>
                                     <div class="mb-3">
                                         <label for="popupImage" class="col-form-label">이미지</label>
-                                        <input type="file" class="form-control" id="popupImage">
+                                        <div class="input-group">
+                                            <input type="file" class="form-control" id="popupImage">
+                                            <button class="btn btn-outline-secondary" type="button" id="popupImageDeleteBtn">삭제</button>
+                                        </div>
                                     </div>
                                     <div class="mb-3">
                                         <label for="popupTitle" class="col-form-label">제목</label>
@@ -83,77 +90,50 @@
                         </div>
                     </div>
                 </div>
-
            </div>
         </div>
 
-        <!--<table class="table table-striped table-hover">
-            <thead>
-                <tr>
-                    <th scope="col">#</th>
-                    <th scope="col">제목</th>
-                    <th scope="col">내용</th>
-                    <th scope="col">시작일</th>
-                    <th scope="col">종료일</th>
-                    <th scope="col">비고</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <th scope="row">1</th>
-                    <td>Mark</td>
-                    <td>Otto</td>
-                    <td>@mdo</td>
-                    <td>
-                        <div class="dropdown">
-                            <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                Dropdown button
-                            </button>
-                            <ul class="dropdown-menu">
-                                <li><a class="dropdown-item" href="#">Action</a></li>
-                                <li><a class="dropdown-item" href="#">Another action</a></li>
-                                <li><a class="dropdown-item" href="#">Something else here</a></li>
-                            </ul>
-                        </div>
-                    </td>
-                </tr>
-                <tr>
-                    <th scope="row">2</th>
-                    <td>Jacob</td>
-                    <td>Thornton</td>
-                    <td>@fat</td>
-                    <td>
-                        <div class="dropdown">
-                            <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                Dropdown button
-                            </button>
-                            <ul class="dropdown-menu">
-                                <li><a class="dropdown-item" href="#">Action</a></li>
-                                <li><a class="dropdown-item" href="#">Another action</a></li>
-                                <li><a class="dropdown-item" href="#">Something else here</a></li>
-                            </ul>
-                        </div>
-                    </td>
-                </tr>
-                <tr>
-                    <th scope="row">3</th>
-                    <td colspan="2">Larry the Bird</td>
-                    <td>@twitter</td>
-                    <td>
-                        <div class="dropdown">
-                            <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                Dropdown button
-                            </button>
-                            <ul class="dropdown-menu">
-                                <li><a class="dropdown-item" href="#">Action</a></li>
-                                <li><a class="dropdown-item" href="#">Another action</a></li>
-                                <li><a class="dropdown-item" href="#">Something else here</a></li>
-                            </ul>
-                        </div>
-                    </td>
-                </tr>
-            </tbody>
-        </table>-->
 
+        <script>
+            /**
+             * 전역변수 설정
+             * @type {HTMLElement}
+             */
+            const popupImage = document.getElementById("popupImage");
+            const popupImageDeleteBtn = document.getElementById("popupImageDeleteBtn");
+
+            /**
+             * 이벤트 등록
+             */
+            //이미지파일 삭제 버튼 클릭 시 삭제
+            popupImageDeleteBtn.addEventListener("click", function(){
+                const popupImage = document.getElementById("popupImage");
+                const preview = document.getElementById("popupImagePreview");
+                popupImage.value='';
+                preview.style.display = "none";
+            });
+            //이미지파일 업로드 시 미리보기 생성하기
+            popupImage.addEventListener("change", function(event){
+                popupImagePreview(event);
+
+
+                //이미지 미리보기 DIV display 활성화
+                if (true) {
+                    const preview = document.getElementById("popupImagePreview");
+                    preview.style.display = "";
+                    preview.src = window.URL.createObjectURL("URL");
+                }
+            });
+
+            /**
+             * 함수 정의
+             */
+            function popupImagePreview(event){
+                const files = event.target.files;
+
+                //파일 미리보기
+                console.log(files);
+            }
+        </script>
     </div>
 </html>
