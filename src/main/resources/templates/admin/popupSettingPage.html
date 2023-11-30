@@ -56,8 +56,6 @@
                             <div class="modal-body">
                                 <form>
                                     <img class="mb-3" id="popupImagePreview" style="display: none;">
-                                        <div>이미지 미리보기</div>
-                                    </img>
                                     <div class="mb-3">
                                         <label for="popupImage" class="col-form-label">이미지</label>
                                         <div class="input-group">
@@ -112,27 +110,65 @@
                 popupImage.value='';
                 preview.style.display = "none";
             });
-            //이미지파일 업로드 시 미리보기 생성하기
+            //이미지 파일 업로드
             popupImage.addEventListener("change", function(event){
-                popupImagePreview(event);
-
-
-                //이미지 미리보기 DIV display 활성화
+                popupImageUpload(event);
+            });
+            /**
+             * 함수 정의
+             */
+            //이미지 미리보기
+            function popupImagePreview(){
                 if (true) {
                     const preview = document.getElementById("popupImagePreview");
                     preview.style.display = "";
                     preview.src = window.URL.createObjectURL("URL");
                 }
-            });
+            }
+            // 이미지 유효성 검증
+            function popupImagesValidation(file) {
+                if (file) {
+                    const csrfToken = document.querySelector('meta[name="_csrf"]').getAttribute("content");
+                    const csrfHeader = document.querySelector('meta[name="_csrf_header"]').getAttribute("content");
 
-            /**
-             * 함수 정의
-             */
-            function popupImagePreview(event){
+                    let xhr = new XMLHttpRequest();
+                    const formData = new FormData();
+
+                    xhr.onreadystatechange = function () {
+                        if (xhr.readyState === XMLHttpRequest.DONE) {
+                            if (xhr.status === 200) {
+                                //return 값은 boolean 값으로
+                                console.log(xhr.response);
+                                return xhr.response;
+                            } else {
+                                alert('이미지 파일 업로드 중 오류가 발생하였습니다.');
+                                console.log(xhr.response);
+                                return xhr.response;
+                            }
+                        }
+                    }
+
+                    formData.append('file', file);
+
+                    xhr.open('POST', '/admin/imagesValidation', true);
+                    xhr.setRequestHeader(csrfHeader, csrfToken);
+                    // xhr.setRequestHeader('Content-Type', 'application/json');
+                    xhr.send(formData);
+                }
+            }
+            // 이미지 업로드
+            function popupImageUpload(event){
                 const files = event.target.files;
+                // 이미지 유효성 검증 => 비동기를 동기로 해야하나..? 무튼 그렇슴
+                if (!popupImagesValidation(files[0])) {
+                    alert("이미지로 업로드 가능한 형식은\n[ .jpg .png .gif ] 입니다.");
+                    popupImageDeleteBtn.click();
+                }
+                //이미지 업로드 수행
 
-                //파일 미리보기
-                console.log(files);
+
+                //이미지 미리보기
+                // popupImagePreview();
             }
         </script>
     </div>

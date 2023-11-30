@@ -1,11 +1,15 @@
 package com.study.grpware.admin;
 
+import com.study.grpware.util.file.ImageValidator;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.nio.file.Path;
 
 @Controller
 @RequiredArgsConstructor
@@ -21,5 +25,16 @@ public class AdminController {
     @GetMapping("/announceWithPopup")
     public String goToPopupNoticePage(){
         return "/admin/popupSettingPage";
+    }
+
+    /**
+     * 이미지 형식 유효성 검증
+     * @param file
+     * @return
+     */
+    @PostMapping("imagesValidation")
+    @ResponseBody
+    public boolean imagesValidationCheck(@RequestPart("file") MultipartFile file){
+        return ImageValidator.isValidImage(file);
     }
 }
