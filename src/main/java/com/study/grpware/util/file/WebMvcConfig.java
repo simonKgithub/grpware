@@ -22,8 +22,9 @@ public class WebMvcConfig implements WebMvcConfigurer {
 
         /**
          * 파비콘도 처리해줌 (images로 들어가서 반응되지 않아 조치를 취함)
-         */
+
         registry.addResourceHandler("/favicon.svg")
                 .addResourceLocations(uploadPath);
+         */
     }
 }

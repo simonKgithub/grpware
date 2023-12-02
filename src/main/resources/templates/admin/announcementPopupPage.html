@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+        layout:decorate="~{layouts/lauout}">
+
+    <div layout:fragment="content">
+        <!-- head -->
+        <nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="#">Settings</a></li>
+                <li class="breadcrumb-item active" aria-current="page">Announce Popup</li>
+            </ol>
+        </nav>
+
+        <div class="d-grid gap-2 mb-3 d-md-flex justify-content-md-end">
+            <button type="button" class="btn btn-outline-secondary" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                공지 팝업 추가
+            </button>
+        </div>
+
+        <!-- body -->
+        <div class="container-fluid">
+            <!--값이 있는 경우-->
+            <div class="row" th:each="announcementDto : ${announcementDtoList}">
+                <div class="card mb-3 me-3" style="width: 18rem;">
+                    <div class="opacity-50 rounded mt-3" style="background-color: rgb(0 0 0);height: 200px;display: flex;justify-content: center;align-items: center;color: white;">no image</div>
+                    <div class="card-body">
+                        <h5 class="card-title" th:text="*{announcementDto.annoTitle}">Card title</h5>
+                        <h6 class="card-subtitle mb-2 text-body-secondary"><span th:text="*{announcementDto.startDate}">start</span>~<span th:text="*{announcementDto.endDate}">end</span> day</h6>
+                        <p class="card-text" th:text="*{announcementDto.annoContents}">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+                        <a href="#" class="card-link">Edit link</a>
+                        <a href="#" class="card-link">Delete link</a>
+                        <span class="card-link" th:text="*{announcementDto.registrant}">등록자</span>
+                    </div>
+                </div>
+            </div>
+            <!--값이 없는 경우-->
+            <div class="row" th:if="${#lists.isEmpty(announcementDtoList)}">
+                <div class="card mb-3 me-3" style="width: 18rem;">
+                    <div class="opacity-50 rounded mt-3" style="background-color: rgb(0 0 0);height: 200px;display: flex;justify-content: center;align-items: center;color: white;">no image</div>
+                    <div class="card-body">
+                        <h5 class="card-title">Card title</h5>
+                        <h6 class="card-subtitle mb-2 text-body-secondary">start ~ end day</h6>
+                        <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+                        <a href="#" class="card-link">Edit link</a>
+                        <a href="#" class="card-link">Delete link</a>
+                        <span class="card-link">등록자</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Modal -->
+            <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h1 class="modal-title fs-5" id="exampleModalLabel">공지용 팝업 등록</h1>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" id="modalCloseBtn"></button>
+                        </div>
+                        <div class="modal-body">
+                            <form id="modalForm" action="/admin/annoRegistration" method="post">
+                                <img class="mb-3" id="popupImagePreview" style="display: none;" width="100" height="100">
+                                <div id="fileId" hidden="hidden"></div>
+                                <div class="mb-3">
+                                    <label for="popupImage" class="col-form-label">이미지</label>
+                                    <div class="input-group">
+                                        <input type="file" class="form-control" id="popupImage">
+                                        <button class="btn btn-outline-secondary" type="button" id="popupImageDeleteBtn">삭제</button>
+                                    </div>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="annoTitle" class="col-form-label">제목</label>
+                                    <input type="text" class="form-control" id="annoTitle" name="annoTitle">
+                                    <!--<p th:if="${#fields.hasErrors('annotitle')}" th:errors="*{annoTitle}" class="fieldError">Incorrect data</p>-->
+                                </div>
+                                <div class="mb-3">
+                                    <label for="startDate" class="col-form-label">사용기간</label>
+                                    <div class="input-group">
+                                        <input type="text" class="form-control"  id="startDate" name="startDate" placeholder="시작일" aria-label="시작일">
+                                        <!--<p th:if="${#fields.hasErrors('startDate')}" th:errors="*{startDate}" class="fieldError">Incorrect data</p>-->
+                                        <span class="input-group-text"> ~ </span>
+                                        <input type="text" class="form-control" name="endDate" placeholder="종료일" aria-label="종료일">
+                                        <!--<p th:if="${#fields.hasErrors('endDate')}" th:errors="*{endDate}" class="fieldError">Incorrect data</p>-->
+                                    </div>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="annoContents" class="col-form-label">내용</label>
+                                    <textarea class="form-control" id="annoContents" name="annoContents"></textarea>
+                                    <!--<p th:if="${#fields.hasErrors('annoContents')}" th:errors="*{annoContents}" class="fieldError">Incorrect data</p>-->
+                                </div>
+                            </form>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="submit" class="btn btn-primary">저장</button>
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" id="popupCancelBtn">취소</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <script>
+            /**
+             * 전역변수 설정
+             * @type {HTMLElement}
+             */
+            const popupImage = document.getElementById("popupImage");
+            const popupImageDeleteBtn = document.getElementById("popupImageDeleteBtn");
+
+            /**
+             * 이벤트 등록
+             */
+            // 화면 벗어나면 정보 리셋 (닫기버튼, 모달화면 바깥버튼, 취소버튼, ESC)
+            document.getElementById("modalCloseBtn").addEventListener("click", formReset); //닫기버튼
+            document.getElementById("popupCancelBtn").addEventListener("click", formReset); //취소버튼
+            document.getElementById("exampleModal").addEventListener("click", function(event){ //모달화면 바깥 버튼
+                const modalContainer = document.getElementById("exampleModal");
+                if (event.target === modalContainer) {
+                    formReset();
+                }
+            });
+            document.addEventListener("keydown", function (event) { //ESC
+                if (event.key === "Escape") {
+                    formReset();
+                }
+            });
+            //이미지파일 삭제 버튼 클릭 시 삭제
+            popupImageDeleteBtn.addEventListener("click", function(){
+                const popupImage = document.getElementById("popupImage");
+                const preview = document.getElementById("popupImagePreview");
+                const fileId = document.getElementById("fileId");
+
+                popupImage.value='';
+                preview.style.display = "none";
+
+                // filePath 따라서 파일 삭제하기
+                if (fileId.value != null) {
+                    deletePopupImages(fileId.value);
+                }
+            });
+            //이미지 파일 업로드
+            popupImage.addEventListener("change", function(event){
+                // 기존에 있는게 있다면 삭제 후 업로드 수행
+                const fileId = document.getElementById("fileId");
+                if (fileId.value) {
+                    deletePopupImages(fileId.value);
+                }
+                popupImageUploadProcess(event);
+            });
+
+            /**
+             * 함수 정의
+             */
+            // 모달 화면 리셋
+            function formReset(){
+                const modalForm = document.getElementById("modalForm");
+                const fileId = document.getElementById("fileId");
+                const preview = document.getElementById("popupImagePreview");
+                preview.style.display = "none";
+
+                if (fileId.value) {
+                    deletePopupImages(fileId.value);
+                }
+                modalForm.reset();
+            }
+            //파일 삭제하기
+            function deletePopupImages(fileId) {
+                const csrfToken = document.querySelector('meta[name="_csrf"]').getAttribute("content");
+                const csrfHeader = document.querySelector('meta[name="_csrf_header"]').getAttribute("content");
+
+                let xhr = new XMLHttpRequest();
+                let object = {};
+
+                xhr.onreadystatechange = function () {
+                    if (xhr.readyState === XMLHttpRequest.DONE) {
+                        if (xhr.status === 200) {
+
+                        } else {
+                            alert('파일 삭제 중 오류가 발생하였습니다.');
+                            // console.log(xhr.response);
+                        }
+                    }
+                }
+                object['fileId'] = Number(fileId);
+                const params = JSON.stringify(object);
+
+                xhr.open('POST', '/admin/imagesDelete', true);
+                xhr.setRequestHeader('Content-Type', 'application/json');
+                xhr.setRequestHeader(csrfHeader, csrfToken);
+                xhr.send(params);
+            }
+            //(Not Used)이미지 미리보기 세팅
+            function imagesPreviewSetting(file){
+                let preview = document.getElementById("popupImagePreview");
+                preview.style.display = "";
+                preview.src = "/images/file/"+file.fileName;
+            }
+            //(Not Used)이미지 미리보기
+            function popupImagePreview(fileId){
+                const csrfToken = document.querySelector('meta[name="_csrf"]').getAttribute("content");
+                const csrfHeader = document.querySelector('meta[name="_csrf_header"]').getAttribute("content");
+                let xhr = new XMLHttpRequest();
+                let object = {};
+
+                xhr.onreadystatechange = function () {
+                    if (xhr.readyState === XMLHttpRequest.DONE) {
+                        if (xhr.status === 200) {
+                            /**
+                             * 파일을 직접 불러와야 하지만, 웹페이지에서 로컬 파일 시스템으로 직접 접근은 보안상의 이유로 금지되어있음
+                             * 따라서 직접 불러오지 않고, 저장되는 /static/~ 경로에서 불러옴.
+                             * 나중에는 로컬에 저장하지 않고 서버에 저장하여 직접 불러올 수 있도록 file.fileOriPath 로 불러오도록 하자.
+                             * => 브라우저 로딩 문제로 404 에러 발생 => 자바스크립트 미리보기로 미리보기 바로 가능하도록 조치 취함
+                             */
+                            const file = JSON.parse(xhr.response);
+                            imagesPreviewSetting(file);
+                        } else {
+                            alert('이미지 미리보기 중 오류가 발생하였습니다.');
+                            // console.log(xhr.response);
+                        }
+                    }
+                }
+                object['fileId'] = Number(fileId);
+                const params = JSON.stringify(object);
+
+                xhr.open('POST', '/admin/imagesPreview', true);
+                xhr.setRequestHeader('Content-Type', 'application/json');
+                xhr.setRequestHeader(csrfHeader, csrfToken);
+                xhr.send(params);
+            }
+            // 이미지 파일 업로드
+            function popupImageUpload(file, callback){
+                if (file) {
+                    const csrfToken = document.querySelector('meta[name="_csrf"]').getAttribute("content");
+                    const csrfHeader = document.querySelector('meta[name="_csrf_header"]').getAttribute("content");
+
+                    let xhr = new XMLHttpRequest();
+                    const formData = new FormData();
+
+                    xhr.onreadystatechange = function () {
+                        if (xhr.readyState === XMLHttpRequest.DONE) {
+                            if (xhr.status === 200) {
+                                //return 값은 boolean 값으로
+                                const fileId = document.getElementById("fileId");
+                                fileId.value = xhr.response;
+                                callback(xhr.response);
+                            } else {
+                                alert('이미지 파일 업로드 중 오류가 발생하였습니다.');
+                                // console.log(xhr.response);
+                                return false;
+                            }
+                        }
+                    }
+                    formData.append('file', file);
+
+                    xhr.open('POST', '/admin/imagesUpload', true);
+                    xhr.setRequestHeader(csrfHeader, csrfToken);
+                    xhr.send(formData);
+                }
+            }
+            // 이미지 유효성 검증
+            function popupImagesValidation(file, callback) {
+                if (file) {
+                    const csrfToken = document.querySelector('meta[name="_csrf"]').getAttribute("content");
+                    const csrfHeader = document.querySelector('meta[name="_csrf_header"]').getAttribute("content");
+
+                    let xhr = new XMLHttpRequest();
+                    const formData = new FormData();
+
+                    xhr.onreadystatechange = function () {
+                        if (xhr.readyState === XMLHttpRequest.DONE) {
+                            if (xhr.status === 200) {
+                                //return 값은 boolean 값으로
+                                console.log(xhr.response);
+                                callback(xhr.response);
+                            } else {
+                                alert('이미지 파일 유효성 검증 중 오류가 발생하였습니다.');
+                                console.log(xhr.response);
+                                callback(xhr.response);
+                            }
+                        }
+                    }
+
+                    formData.append('file', file);
+
+                    xhr.open('POST', '/admin/imagesValidation', true);
+                    xhr.setRequestHeader(csrfHeader, csrfToken);
+                    // xhr.setRequestHeader('Content-Type', 'application/json');
+                    xhr.send(formData);
+                }
+            }
+            // 이미지 업로드 과정 (유효성 검증 => 파일 업로드 => 미리보기 만들기)
+            function popupImageUploadProcess(event){
+                const files = event.target.files;
+                // 이미지 유효성 검증 => files[0]을 넣어 실행한 popupImagesValidation의 결과를 function()으로 처리함 (콜백이용)
+                popupImagesValidation(files[0], function(result){
+                    if (result ==='false') {
+                        alert("이미지로 업로드 가능한 형식은\n[ .jpg .png .gif ] 입니다.");
+                        popupImageDeleteBtn.click();
+                        return false;
+                    }
+                    // 이미지 파일 저장 후 이미지 미리보기
+                    popupImageUpload(files[0], function(result){
+                        //result 는 저장되는 fileId
+                        // popupImagePreview(result);
+
+                        const reader = new FileReader();
+                        // 파일 읽기가 완료되면 실행되는 콜백 함수
+                        reader.onload = function (e) {
+                            // 읽은 데이터를 이미지 미리보기에 설정
+                            let preview = document.getElementById("popupImagePreview");
+                            preview.style.display = "";
+                            preview.src = e.target.result;
+                        };
+                        reader.readAsDataURL(files[0]);
+                    });
+                });
+            }
+        </script>
+    </div>
+</html>

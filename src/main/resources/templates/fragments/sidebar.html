@@ -38,7 +38,7 @@
                     </div>
                 </li>
                 <li class="border-top my-3"></li>
-                <li class="mb-1">
+                <li class="mb-1" sec:authorize="hasAnyAuthority('ROLE_ADMIN')">
                     <button class="btn btn-toggle d-inline-flex align-items-center rounded border-0 collapsed" data-bs-toggle="collapse" data-bs-target="#account-collapse" aria-expanded="false">
                         <img src="/images/main/gear.svg" alt="" width="32" height="17" class="d-inline-block align-text-top">
                         Settings
