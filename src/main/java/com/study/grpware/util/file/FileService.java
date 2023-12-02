@@ -37,8 +37,7 @@ public class FileService {
     }
 
     public Long uploadFile(String uploadPath, String originalFileName, byte[] fileData) throws Exception {
-        LocalDateTime nowTime = LocalDateTime.now();
-        String now = nowTime.format(DateTimeFormatter.ofPattern("yyyyMMddHHmmss"));
+        String now = CommonUtils.getNow();
 
         String[] fileName = originalFileName.split("\\.");
 

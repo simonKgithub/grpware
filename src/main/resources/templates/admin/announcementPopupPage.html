@@ -3,6 +3,13 @@
         layout:decorate="~{layouts/lauout}">
 
     <div layout:fragment="content">
+        <style>
+            .fieldError{
+                color: #bb2d3b;
+                font-size: small;
+                display: none;
+            }
+        </style>
         <!-- head -->
         <nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
             <ol class="breadcrumb">
@@ -57,9 +64,9 @@
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" id="modalCloseBtn"></button>
                         </div>
                         <div class="modal-body">
-                            <form id="modalForm" action="/admin/annoRegistration" method="post">
+                            <form id="modalForm">
                                 <img class="mb-3" id="popupImagePreview" style="display: none;" width="100" height="100">
-                                <div id="fileId" hidden="hidden"></div>
+                                <div id="fileId" name="fileId" hidden="hidden"></div>
                                 <div class="mb-3">
                                     <label for="popupImage" class="col-form-label">이미지</label>
                                     <div class="input-group">
@@ -70,27 +77,33 @@
                                 <div class="mb-3">
                                     <label for="annoTitle" class="col-form-label">제목</label>
                                     <input type="text" class="form-control" id="annoTitle" name="annoTitle">
-                                    <!--<p th:if="${#fields.hasErrors('annotitle')}" th:errors="*{annoTitle}" class="fieldError">Incorrect data</p>-->
+                                    <p data-error-field="annoTitle" class="fieldError">Incorrect data</p>
                                 </div>
                                 <div class="mb-3">
                                     <label for="startDate" class="col-form-label">사용기간</label>
                                     <div class="input-group">
-                                        <input type="text" class="form-control"  id="startDate" name="startDate" placeholder="시작일" aria-label="시작일">
-                                        <!--<p th:if="${#fields.hasErrors('startDate')}" th:errors="*{startDate}" class="fieldError">Incorrect data</p>-->
-                                        <span class="input-group-text"> ~ </span>
-                                        <input type="text" class="form-control" name="endDate" placeholder="종료일" aria-label="종료일">
-                                        <!--<p th:if="${#fields.hasErrors('endDate')}" th:errors="*{endDate}" class="fieldError">Incorrect data</p>-->
+                                        <div>
+                                            <input type="text" class="form-control"  id="startDate" name="startDate" placeholder="시작일" aria-label="시작일">
+                                            <p data-error-field="startDate" class="fieldError">Incorrect data</p>
+                                        </div>
+                                        <div>
+                                            <span class="input-group-text"> ~ </span>
+                                        </div>
+                                        <div>
+                                            <input type="text" class="form-control" name="endDate" placeholder="종료일" aria-label="종료일">
+                                            <p data-error-field="endDate" class="fieldError">Incorrect data</p>
+                                        </div>
                                     </div>
                                 </div>
                                 <div class="mb-3">
                                     <label for="annoContents" class="col-form-label">내용</label>
                                     <textarea class="form-control" id="annoContents" name="annoContents"></textarea>
-                                    <!--<p th:if="${#fields.hasErrors('annoContents')}" th:errors="*{annoContents}" class="fieldError">Incorrect data</p>-->
+                                    <p data-error-field="annoContents" class="fieldError">Incorrect data</p>
                                 </div>
                             </form>
                         </div>
                         <div class="modal-footer">
-                            <button type="submit" class="btn btn-primary">저장</button>
+                            <button type="button" class="btn btn-primary" id="popupRegistrationBtn">저장</button>
                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" id="popupCancelBtn">취소</button>
                         </div>
                     </div>
@@ -109,6 +122,8 @@
             /**
              * 이벤트 등록
              */
+            // 팝업공지사항 등록 버튼
+            document.getElementById("popupRegistrationBtn").addEventListener("click", modalFormSubmit);
             // 화면 벗어나면 정보 리셋 (닫기버튼, 모달화면 바깥버튼, 취소버튼, ESC)
             document.getElementById("modalCloseBtn").addEventListener("click", formReset); //닫기버튼
             document.getElementById("popupCancelBtn").addEventListener("click", formReset); //취소버튼
@@ -150,12 +165,68 @@
             /**
              * 함수 정의
              */
+            // 오류 메시지 클리어
+            function targetClear(){
+                const targets = document.querySelectorAll('.fieldError');
+                targets.forEach(target => {
+                    target.style.display = "none";
+                });
+            }
+            // 모달 폼 에러 표시
+            function displayErrors(errors){
+                targetClear();
+                const targets = document.getElementsByClassName('fieldError');
+                const targetsArr = Array.from(targets);
+
+                targetsArr.forEach(target => {
+                    errors.forEach(error => {
+                        if (target.dataset.errorField === error.errorField) {
+                            target.innerText = error.errorMsg;
+                            target.style.display="block";
+                        };
+                    });
+                });
+
+            }
+            // 모달 폼 버튼 클릭
+            function modalFormSubmit(){
+                const csrfToken = document.querySelector('meta[name="_csrf"]').getAttribute("content");
+                //const csrfHeader = document.querySelector('meta[name="_csrf_header"]').getAttribute("content");
+                targetClear(); // 오류메시지 숨기기
+
+                let xhr = new XMLHttpRequest();
+                const formData = new FormData(document.getElementById("modalForm"));
+
+                // AJAX로 서버에 데이터 전송
+                fetch('/admin/annoRegistration', {
+                    method: 'POST',
+                    body: formData,
+                    headers: {
+                        'X-CSRF-TOKEN' : csrfToken,
+                        // 'Content-Type' : 'application/json'
+                    }
+                })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            alert("성공적으로 저장되었습니다.");
+                            window.location.href = data.redirectUrl;
+                        } else {
+                            //에러정보처리
+                            displayErrors(data.errors);
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                    });
+            }
             // 모달 화면 리셋
             function formReset(){
                 const modalForm = document.getElementById("modalForm");
                 const fileId = document.getElementById("fileId");
                 const preview = document.getElementById("popupImagePreview");
                 preview.style.display = "none";
+                targetClear(); // 오류메시지 숨기기
 
                 if (fileId.value) {
                     deletePopupImages(fileId.value);

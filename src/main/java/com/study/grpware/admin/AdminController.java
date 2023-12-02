@@ -10,6 +10,7 @@ import com.study.grpware.util.file.ImageValidator;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -19,7 +20,10 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 
 @Controller
@@ -41,6 +45,7 @@ public class AdminController {
 
     @GetMapping("/announceWithPopup")
     public String goToPopupNoticePage(Model model){
+        //공지사항 내용 가져오기
         List<AnnouncementEntity> announcementEntityList = announcementService.findAll();
         List<AnnouncementDto> announcementDtoList = new ArrayList<>();
         if (announcementEntityList.size() > 0) {
@@ -109,10 +114,32 @@ public class AdminController {
      * 공지 팝업 등록
      */
     @PostMapping("/annoRegistration")
-    public String annoRegistration(@Valid AnnouncementDto announcementDto, BindingResult bindingResult, Model model) {
+    @ResponseBody
+    public ResponseEntity<Map<String, Object>> annoRegistration(@Valid AnnouncementDto announcementDto, BindingResult bindingResult, Model model) {
+        Map<String, Object> response = new HashMap<>();
+
         if (bindingResult.hasErrors()) {
-            return "/admin/announceWithPopup";
+            response.put("success", false);
+            response.put("errors", getErrors(bindingResult)); //에러 반환
+            return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
         }
-        return "redirect:/admin/announceWithPopup";
+
+        announcementService.addAnnouncementPopup(announcementDto);
+        response.put("success", true);
+        response.put("redirectUrl", "/admin/announceWithPopup");
+
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    private List<Map<String, Object>> getErrors(BindingResult bindingResult) {
+        return bindingResult.getFieldErrors()
+                .stream()
+                .map(error -> {
+                    Map<String, Object> errorMap = new HashMap<>();
+                    errorMap.put("errorField", error.getField());
+                    errorMap.put("errorMsg", error.getDefaultMessage());
+                    return errorMap;
+                })
+                .collect(Collectors.toList());
     }
 }
