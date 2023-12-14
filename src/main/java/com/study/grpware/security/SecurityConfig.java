@@ -29,8 +29,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .failureUrl("/login/error") //로그인 실패 시 이동할 url
                 .and()
                 .logout()
-                .logoutRequestMatcher(new AntPathRequestMatcher("/logout")) //로그아웃 url
-                .logoutSuccessUrl("/login");    //로그아웃 성공 시 이동 url
+                .logoutRequestMatcher(new AntPathRequestMatcher("/logout")) //get으로 /logout 날려도 시큐리티에서 post로 인식
+                .logoutSuccessUrl("/login?logout=success");    //로그아웃 성공 시 이동 url
 
         http.authorizeRequests() //시큐리티 처리에 HttpServletRequest 이용
                 .mvcMatchers("/login", "/login/error",

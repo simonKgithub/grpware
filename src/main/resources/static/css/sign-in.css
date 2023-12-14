@@ -8,18 +8,28 @@ body {
   padding: 1rem;
 }
 
-.form-signin .form-floating:focus-within {
-  z-index: 2;
-}
-
 .form-signin input[type="email"] {
-  margin-bottom: -1px;
   border-bottom-right-radius: 0;
   border-bottom-left-radius: 0;
+  border-bottom: none;
+}
+
+.form-signin span[for="email"]{
+  border-bottom: none;
 }
 
 .form-signin input[type="password"] {
-  margin-bottom: 10px;
   border-top-left-radius: 0;
   border-top-right-radius: 0;
 }
+
+.form-signin span {
+  width: 90px;
+  font-size: small;
+}
+
+.form-signin .welcome {overflow: hidden;}
+.form-signin .welcome img {float: left;}
+.form-signin .welcome .welcome-text {line-height: 2.1;}
+
+.form-signin .form-check-label {font-size: 14px;}
