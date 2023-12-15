@@ -30,10 +30,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .logout()
                 .logoutRequestMatcher(new AntPathRequestMatcher("/logout")) //get으로 /logout 날려도 시큐리티에서 post로 인식
-                .logoutSuccessUrl("/login?logout=success");    //로그아웃 성공 시 이동 url
+                .logoutSuccessUrl("/login/logout");    //로그아웃 성공 시 이동 url
 
         http.authorizeRequests() //시큐리티 처리에 HttpServletRequest 이용
-                .mvcMatchers("/login", "/login/error",
+                .mvcMatchers("/login", "/login/error", "/login/logout",
                         "/member/memberJoin", "/forget", "/email/check",
                         "/css/**", "/js/**", "/images/**").permitAll()
                 .mvcMatchers("/admin/**").hasRole("ADMIN")

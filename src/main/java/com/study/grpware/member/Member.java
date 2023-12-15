@@ -41,14 +41,14 @@ public class Member implements UserDetails {
     @Enumerated(EnumType.STRING)
     private Role role;
 
-    public static Member createMember(MemberFormDto memberFormDto, PasswordEncoder passwordEncoder) {
+    public static Member createMember(MemberDto memberDto, PasswordEncoder passwordEncoder) {
         Member member = new Member();
-        member.setEmail(memberFormDto.getEmailId() + memberFormDto.getEmailAddress());
-        String encodedPassword = passwordEncoder.encode(memberFormDto.getPassword());
+        member.setEmail(memberDto.getEmail());
+        String encodedPassword = passwordEncoder.encode(memberDto.getPassword());
         member.setPassword(encodedPassword);
-        member.setMemberName(memberFormDto.getMemberName());
-        member.setMemberNumber(memberFormDto.getMemberNumber());
-        member.setMemberBirth(memberFormDto.getBirthYYYY() + "-" + memberFormDto.getBirthMM() + "-" + memberFormDto.getBirthDD());
+        member.setMemberName(memberDto.getMemberName());
+        member.setMemberNumber(memberDto.getMemberNumber());
+        member.setMemberBirth(memberDto.getMemberBirth());
         member.setRole(Role.USER);
         return member;
     }

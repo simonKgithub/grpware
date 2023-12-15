@@ -32,11 +32,11 @@ class MemberControllerTest {
     void loginFailureTest() throws Exception {
         String email = "dingkoshop@email.com";
         String password = "1234";
-        MemberFormDto newForm = this.createMemberForm(email, password);
+        MemberDto newForm = this.createMemberForm(email, password);
 
         mockMvc.perform(formLogin().userParameter("email")
                 .loginProcessingUrl("/login")
-                .user(newForm.getEmailId() + newForm.getEmailAddress())
+                .user(newForm.getEmail())
                 .password(password+1)
         ).andExpect(SecurityMockMvcResultMatchers.unauthenticated());
 
@@ -47,28 +47,24 @@ class MemberControllerTest {
     void loginSuccessTest() throws Exception {
         String email = "dingkoshop@email.com";
         String password = "1234";
-        MemberFormDto newForm = this.createMemberForm(email, password);
+        MemberDto newForm = this.createMemberForm(email, password);
 
         mockMvc.perform(formLogin().userParameter("email")
                 .loginProcessingUrl("/login")
-                .user(newForm.getEmailId() + newForm.getEmailAddress())
+                .user(newForm.getEmail())
                 .password(password)
         ).andExpect(SecurityMockMvcResultMatchers.authenticated());
 
     }
 
-    private MemberFormDto createMemberForm(String email, String password){
-        MemberFormDto memberFormDto = new MemberFormDto();
-        String[] emailArr = email.split("@");
-        memberFormDto.setEmailId(emailArr[0]);
-        memberFormDto.setEmailAddress("@"+emailArr[1]);
-        memberFormDto.setPassword(password);
-        memberFormDto.setMemberName("dingko");
-        memberFormDto.setMemberNumber("010-4153-9702");
-        memberFormDto.setBirthYYYY("1994");
-        memberFormDto.setBirthMM("06");
-        memberFormDto.setBirthDD("14");
-        return memberService.registerMember(memberFormDto, passwordEncoder);
+    private MemberDto createMemberForm(String email, String password){
+        MemberDto memberDto = new MemberDto();
+        memberDto.setEmail(email);
+        memberDto.setPassword("1234");
+        memberDto.setMemberName("dingko");
+        memberDto.setMemberNumber("01041539702");
+        memberDto.setMemberBirth("19940614");
+        return MemberDto.of(Member.createMember(memberDto, passwordEncoder));
     }
 
 }

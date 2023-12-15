@@ -28,6 +28,12 @@ public class LoginController {
         return "login/loginPage";
     }
 
+    @GetMapping("/login/logout")
+    public String logoutSuccess(Model model){
+        model.addAttribute("logoutMsg", "로그아웃이 완료되었습니다.");
+        return "login/loginPage";
+    }
+
     @GetMapping("/forget")
     public String goToForgetPage(){
         return "login/forgetPage";

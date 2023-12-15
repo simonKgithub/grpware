@@ -18,7 +18,7 @@ body {
   border-bottom: none;
 }
 
-.form-signin input[type="password"] {
+.form-signin .input-group input[type="password"] {
   border-top-left-radius: 0;
   border-top-right-radius: 0;
 }
@@ -33,3 +33,8 @@ body {
 .form-signin .welcome .welcome-text {line-height: 2.1;}
 
 .form-signin .form-check-label {font-size: 14px;}
+
+.error-message {
+  font-size: 8px;
+  color: red;
+}

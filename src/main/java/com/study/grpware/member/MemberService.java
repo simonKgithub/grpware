@@ -2,13 +2,15 @@ package com.study.grpware.member;
 
 import com.study.grpware.util.email.EmailService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 @Service
 @Transactional
@@ -20,14 +22,15 @@ public class MemberService implements UserDetailsService {
 
     /**
      * 회원등록 ( memberFormDto 진행됨)
-     * @param memberFormDto
+     * @param memberDto
      * @return MemberFormDto
      */
-    public MemberFormDto registerMember(MemberFormDto memberFormDto, PasswordEncoder passwordEncoder) {
-        Member member = Member.createMember(memberFormDto, passwordEncoder);
-        validateDuplicationMember(member);
+    public MemberDto registerMember(MemberDto memberDto, PasswordEncoder passwordEncoder) {
+        validatePassword(memberDto.getPassword()); //비밀번호 검증
+        Member member = Member.createMember(memberDto, passwordEncoder);
+        validateDuplicationMember(member); //중복검증
         Member savedMember = memberRepository.save(member);
-        return MemberFormDto.of(savedMember);
+        return MemberDto.of(savedMember);
     }
 
     /**
@@ -70,6 +73,18 @@ public class MemberService implements UserDetailsService {
         Member dbMember = memberRepository.findByEmail(member.getEmail());
         if (dbMember != null) {
             throw new IllegalStateException("이미 가입된 회원입니다.");
+        }
+    }
+
+    /**
+     * 비밀번호 유효성 검증 (최소 8자 이상, 숫자, 특수문자 포함)
+     * @param password
+     */
+    private void validatePassword(String password) {
+        Pattern pattern = Pattern.compile("^(?=.*[0-9])(?=.*[@#$%^&+=!])(?=\\S+$).{8,}$");
+        Matcher matcher = pattern.matcher(password);
+        if (!matcher.matches()) {
+            throw new IllegalStateException("비밀번호는 최소 8자 이상, 숫자, 특수문자가 포함되어야 합니다.");
         }
     }
 

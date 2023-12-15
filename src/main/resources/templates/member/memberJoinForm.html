@@ -11,157 +11,56 @@
 
     <link rel="canonical" href="https://getbootstrap.com/docs/5.3/examples/sign-in/">
     <link rel="icon" type="image/x-icon" href="/images/favicon.svg">
-    <!--<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@docsearch/css@3">-->
-
     <link href="/css/bootstrap.min.css" rel="stylesheet">
-    <style>
-        .bd-placeholder-img {
-            font-size: 1.125rem;
-            text-anchor: middle;
-            -webkit-user-select: none;
-            -moz-user-select: none;
-            user-select: none;
-        }
-
-        @media (min-width: 768px) {
-            .bd-placeholder-img-lg {
-                font-size: 3.5rem;
-            }
-        }
-
-        .b-example-divider {
-            width: 100%;
-            height: 3rem;
-            background-color: rgba(0, 0, 0, .1);
-            border: solid rgba(0, 0, 0, .15);
-            border-width: 1px 0;
-            box-shadow: inset 0 .5em 1.5em rgba(0, 0, 0, .1), inset 0 .125em .5em rgba(0, 0, 0, .15);
-        }
-
-        .b-example-vr {
-            flex-shrink: 0;
-            width: 1.5rem;
-            height: 100vh;
-        }
-
-        .bi {
-            vertical-align: -.125em;
-            fill: currentColor;
-        }
-
-        .nav-scroller {
-            position: relative;
-            z-index: 2;
-            height: 2.75rem;
-            overflow-y: hidden;
-        }
-
-        .nav-scroller .nav {
-            display: flex;
-            flex-wrap: nowrap;
-            padding-bottom: 1rem;
-            margin-top: -1px;
-            overflow-x: auto;
-            text-align: center;
-            white-space: nowrap;
-            -webkit-overflow-scrolling: touch;
-        }
-
-        .btn-bd-primary {
-            --bd-violet-bg: #712cf9;
-            --bd-violet-rgb: 112.520718, 44.062154, 249.437846;
-
-            --bs-btn-font-weight: 600;
-            --bs-btn-color: var(--bs-white);
-            --bs-btn-bg: var(--bd-violet-bg);
-            --bs-btn-border-color: var(--bd-violet-bg);
-            --bs-btn-hover-color: var(--bs-white);
-            --bs-btn-hover-bg: #6528e0;
-            --bs-btn-hover-border-color: #6528e0;
-            --bs-btn-focus-shadow-rgb: var(--bd-violet-rgb);
-            --bs-btn-active-color: var(--bs-btn-hover-color);
-            --bs-btn-active-bg: #5a23c8;
-            --bs-btn-active-border-color: #5a23c8;
-        }
-        .bd-mode-toggle {
-            z-index: 1500;
-        }
-
-        .error-message {
-            color: red;
-            font-size: 12px;
-        }
-    </style>
-
-    <!-- Custom styles for this template -->
     <link href="/css/sign-in.css" rel="stylesheet">
 </head>
 <body class="d-flex align-items-center py-4 bg-body-tertiary">
 
 <main class="form-signin w-100 m-auto">
-    <form class="needs-validation" action="/member/memberJoin" method="post" th:object="${memberFormDto}" >
-        <img class="mb-4" src="/images/member/memberJoin0.svg" alt="" width="72" height="57" id="memberJoin">
-        <h1 class="h4 mb-3 fw-normal">양식을 작성해주세요😁</h1>
-        <div class="row g-3">
-            <div class="col-sm-5">
-                <label for="emailId" class="form-label">이메일</label>  <span th:errors="*{emailId}" class="error-message"></span>
-                <input type="text" class="form-control" id="emailId" name="emailId" th:field="*{emailId}" placeholder="e-mail" value="" required="" autocomplete="emailId">
+    <div class="welcome">
+        <img class="mb-2" src="/images/member/memberJoin0.svg" alt="" width="72" height="57" id="memberJoin">
+        <h5 class="welcome-text">양식을 작성해주세요😁</h5>
+    </div>
+    <form class="needs-validation" action="/member/memberJoin" method="post" th:object="${memberDto}">
+        <div class="emailForm">
+            <div class="mb-4">
+                <label for="email" class="form-label">이메일</label>
+                <input class="form-control" list="emailList" id="email" name="email" placeholder="your@email.com" autocomplete="email" required="">
+                <span th:errors="*{email}" class="error-message"></span>
+                <datalist id="emailList"></datalist>
             </div>
-            <div class="col-sm-7">
-                <label for="emailAddress" class="form-label">주소</label>  <span th:errors="*{emailAddress}" class="error-message"></span>
-                <input type="text" class="form-control" id="emailAddress" name="emailAddress" th:field="*{emailAddress}" placeholder="@example.com" value="" required="">
-            </div>
-            <div class="col-12">
-                <div class="input-group">
-                    <span class="input-group-text">@</span>
-                    <select class="form-select" id="emailExample" required="">
-                        <option value="none">직접작성</option>
-                        <option value="@naver.com">naver.com (네이버)</option>
-                        <option value="@gmail.com">gmail.com (구글, 지메일)</option>
-                    </select>
+            <div class="row g-2">
+                <div class="d-grid gap-2">
+                    <button class="btn btn-outline-secondary w-100 py-sm-1" type="button" id="emailCheckBtn">확인 코드 보내기</button>
+                    <button class="btn btn-secondary w-100 py-sm-1" type="button" id="rewriteBtn">다시 작성하기</button>
+                </div>
+                <div class="input-group" id="emailCodeCheckDiv">
+                    <input type="text" class="form-control" placeholder="코드를 입력해주세요." id="emailCodeInput" autocomplete="emailCodeInput">
+                    <button type="button" class="btn btn-secondary" id="emailCodeCheckBtn">확인하기</button>
                 </div>
             </div>
-            <div class="d-grid gap-2">
-                <button class="btn btn-outline-secondary w-100 py-sm-1" type="button" id="emailCheckBtn">확인 코드 보내기</button>
-                <button class="btn btn-secondary w-100 py-sm-1" type="button" id="rewriteBtn">다시 작성하기</button>
-            </div>
-            <div class="input-group" id="emailCodeCheckDiv">
-                <input type="text" class="form-control" placeholder="코드를 입력해주세요." id="emailCodeInput" autocomplete="emailCodeInput">
-                <button type="button" class="btn btn-secondary" id="emailCodeCheckBtn">확인하기</button>
-            </div>
-            <hr class="my-3">
-            <div class="col-12">
-                <label for="password" class="form-label">비밀번호</label>  <span th:errors="*{password}" class="error-message"></span>
-                <input type="password" class="form-control" id="password" name="password" th:field="*{password}" placeholder="password" required="" autocomplete="new-password">
-                <label for="passwordCheck" class="form-label">비밀번호 확인  <span id="passwordCheckInfo" style="font-size: small"></span></label>
-                <input type="password" class="form-control" id="passwordCheck" placeholder="password-check" required="" autocomplete="new-password"><div class="invalid-feedback">
-            </div>
-            </div>
-            <hr class="my-2">
-            <div class="col-12">
-                <label for="memberName" class="form-label">이름</label>  <span th:errors="*{memberName}" class="error-message"></span>
-                <input type="text" class="form-control" id="memberName" name="memberName" th:field="*{memberName}" placeholder="홍길동" required="" maxlength="10">
-            </div>
-            <div class="col-12">
-                <label for="memberNumber" class="form-label">휴대폰번호</label>  <span th:errors="*{memberNumber}" class="error-message"></span>
-                <input type="text" class="form-control" id="memberNumber" name="memberNumber" th:field="*{memberNumber}" placeholder="01012345678" required="" maxlength="13">
-            </div>
-            <div class="col-sm-4">
-                <label for="birthYYYY" class="form-label">년</label>  <span th:errors="*{birthYYYY}" class="error-message"></span>
-                <input type="text" class="form-control" id="birthYYYY" name="birthYYYY" th:field="*{birthYYYY}" placeholder="1994" required="" maxlength="4">
-            </div>
-            <div class="col-sm-4">
-                <label for="birthMM" class="form-label">월</label>  <span th:errors="*{birthMM}" class="error-message"></span>
-                <input type="text" class="form-control" id="birthMM" name="birthMM" th:field="*{birthMM}" placeholder="06" required="" maxlength="2">
-            </div>
-            <div class="col-sm-4">
-                <label for="birthDD" class="form-label">일</label>  <span th:errors="*{birthDD}" class="error-message"></span>
-                <input type="text" class="form-control" id="birthDD" name="birthDD" th:field="*{birthDD}" placeholder="14" required="" maxlength="2">
-            </div>
         </div>
-        <hr class="my-4">
+        <hr>
+        <div>
+            <label for="password" class="form-label">비밀번호 <span id="passwordInfo" style="font-size: small"></span></label>
+            <span th:errors="*{password}" class="error-message"></span>
+            <input type="password" class="form-control mb-2" id="password" name="password" th:field="*{password}" placeholder="password" required="" autocomplete="new-password">
+            <label for="passwordCheck" class="form-label">비밀번호 확인  <span id="passwordCheckInfo" style="font-size: small"></span></label>
+            <input type="password" class="form-control" id="passwordCheck" placeholder="re-check" required="" autocomplete="new-password">
+            <div class="invalid-feedback"></div>
+        </div>
+        <hr>
+        <div>
+            <label for="memberName" class="form-label">이름</label>  <span th:errors="*{memberName}" class="error-message"></span>
+            <input type="text" class="form-control mb-2" id="memberName" name="memberName" th:field="*{memberName}" placeholder="홍길동" required="" maxlength="10">
+            <label for="memberNumber" class="form-label">연락처</label>  <span th:errors="*{memberNumber}" class="error-message"></span>
+            <input type="text" class="form-control mb-2" id="memberNumber" name="memberNumber" th:field="*{memberNumber}" placeholder="('-'없이 입력)" required="" maxlength="13">
+            <label for="memberBirth" class="form-label">생년월일(*8자리)</label>  <span th:errors="*{memberBirth}" class="error-message"></span>
+            <input type="text" class="form-control" id="memberBirth" name="memberBirth" th:field="*{memberBirth}" required="" placeholder="('-'없이 입력)" maxlength="10">
+        </div>
+        <hr>
         <div class="d-grid gap-2">
-            <button class="btn btn-primary w-100 py-2" type="button" id="formBtn">회원가입</button>
+            <button class="btn btn-primary w-100 py-sm-1" type="button" id="formBtn">회원가입</button>
             <button class="btn btn-outline-secondary w-100 py-sm-1" type="button" id="goToLoginBtn" onclick="goToLoginPage()">돌아가기</button>
         </div>
         <p class="mt-5 mb-3 text-body-secondary">&copy; Groupware for Study</p>
@@ -174,32 +73,38 @@
     const logo = document.getElementById("memberJoin");
     const rewriteBtn = document.getElementById("rewriteBtn");
     const emailCheckBtn = document.getElementById("emailCheckBtn");
-    const emailExample = document.getElementById("emailExample");
     const emailCodeCheckDiv = document.getElementById("emailCodeCheckDiv");
     const emailCodeCheckBtn = document.getElementById("emailCodeCheckBtn");
+    const password = document.getElementById("password");
     const passwordCheck = document.getElementById("passwordCheck");
     const memberNumber = document.getElementById("memberNumber");
     const formBtn = document.getElementById("formBtn");
-    const goToLoginBtn = document.getElementById("goToLoginBtn");
+    const memberBirth = document.getElementById("memberBirth");
+    const email = document.getElementById("email");
     let emailValidation = false;
     let passwordValidation = false;
+    let passwordCheckValidation = false;
     let emailCode = "";
 
     /* Listener control Area */
+    // 자동 완성
+    email.addEventListener("keyup", autocomplete);
     // 회원가입 진행하기
     formBtn.addEventListener("click", memberJoinProcess);
+    // 생년월일 - 유효성체크
+    memberBirth.addEventListener("keyup", memberBirthProcess);
     // 휴대폰번호 - 넣기
     memberNumber.addEventListener("keyup", memberNumberProcess);
     //비밀번호 확인하기
     passwordCheck.addEventListener("keyup", passwordCheckProcess);
+    // 비밀번호 유효성 검사
+    password.addEventListener("keyup", passwordVaildCheck);
     // 이메일 인증 코드 확인하기
     emailCodeCheckBtn.addEventListener("click", emailCodeCheck);
     // 다시 작성하기 버튼 클릭
     rewriteBtn.addEventListener("click", emailRewrite);
     // 이메일 확인 코드 보내기 버튼
     emailCheckBtn.addEventListener("click", emailCheckProcess);
-    // 이메일 코드 입히기
-    emailExample.addEventListener("change", selectBoxChange);
     //이미지 변경
     setInterval(changeLogo, 700);
 
@@ -215,16 +120,37 @@
     }
 
     /* Function Area */
-    // 로그인 페이지 돌아가기
-    function goToLoginPage(){
-        window.location.href = "/login";
+    // 이메일 자동완성
+    function autocomplete(){
+        // 옵션 초기화 로직 수행
+        const options = document.getElementById('emailList');
+        while (options.firstChild) {
+            options.removeChild(options.firstChild);
+        }
+
+        const emails = ['@naver.com', '@gmail.com', '@outlook.com', '@daum.net', '@nate.com', '@yahoo.com'];
+        const data = document.getElementById("email").value;
+        emails.forEach((email) => {
+            let result = data;
+            if (/@/.test(data)) {
+                result = data.split("@")[0];
+            }
+            const optionElement = document.createElement('option');
+            optionElement.value = result + email;
+            options.appendChild(optionElement);
+        });
     }
     // 회원가입 데이터 정비 및 넘기기
     function memberJoinProcess(){
         if ( memberJoinDataVaildCheck() ) {
             //disabled 해제 해서 submit 보내기
-            document.getElementById("emailId").disabled = false;
-            document.getElementById("emailAddress").disabled = false;
+            document.getElementById("email").disabled = false;
+            //하이픈 없애기
+            let memberNumber = document.getElementById("memberNumber").value;
+            let memberBirth = document.getElementById("memberBirth").value;
+            document.getElementById("memberNumber").value = memberNumber.replace(/-/g, '');
+            document.getElementById("memberBirth").value = memberBirth.replace(/-/g, '');
+            //submit
             document.querySelector('form').submit();
         }
     }
@@ -247,17 +173,18 @@
                 return false;
             }
         }
-        const birthMM = document.getElementById("birthMM");
-        const birthDD = document.getElementById("birthDD");
-        // 두 자릿수 체크(MM)
-        if(birthMM.value.length == 1 || birthDD.value.length == 1) {
-            birthMM.value = birthMM.value.padStart(2, "0");
-            birthDD.value = birthDD.value.padStart(2, "0");
+        if (!(emailValidation && passwordValidation && passwordCheckValidation)) {
+            alert("이메일 인증 혹은 비밀번호를 점검해주세요.");
         }
-        if (!emailValidation && passwordValidation) {
-            alert("이메일 인증 혹은 비밀번호 확인을 점검해주세요.");
-        }
-        return emailValidation && passwordValidation;
+        return emailValidation && passwordValidation && passwordCheckValidation;
+    }
+    // 생년월일 하이픈 넣기
+    function memberBirthProcess(){
+        let memberBirth = document.getElementById("memberBirth");
+        memberBirth.value = memberBirth.value
+            .replace(/[^0-9]/g, "") //숫자 제외 모든 문자 제거
+            .replace(/(^[0-9]{4})(\\?[0-9]{2})(\\?[0-9]{2})$/, "$1-$2-$3");
+
     }
     // 휴대폰번호 하이픈 넣기
     function memberNumberProcess(){
@@ -271,13 +198,30 @@
         let password = document.getElementById("password");
         let passwordCheck = document.getElementById("passwordCheck");
         let passwordCheckInfo = document.getElementById("passwordCheckInfo");
-        passwordValidation = (password.value === passwordCheck.value);
-        if(passwordValidation){
+        passwordCheckValidation = (password.value === passwordCheck.value);
+        if(passwordCheckValidation){
             passwordCheckInfo.style.color='blue';
             passwordCheckInfo.innerText = "*비밀번호가 일치합니다.";
         } else {
             passwordCheckInfo.style.color='red';
             passwordCheckInfo.innerText = "*비밀번호가 일치하지 않습니다.";
+        }
+    }
+    // 비밀번호 유효성 검사
+    function passwordVaildCheck(){
+        let passwordInfo = document.getElementById("passwordInfo");
+        let password = document.getElementById("password").value;
+        // 최소 8자 이상, 숫자, 특수문자 포함
+        let passwordRegex = /^(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+
+        if (passwordRegex.test(password)) {
+            passwordInfo.style.color = 'blue';
+            passwordInfo.innerText = "*통과"
+            passwordValidation = true;
+        } else {
+            passwordInfo.style.color = 'red';
+            passwordInfo.innerText = "*최소 8자 이상/숫자/특수문자 포함"
+            passwordValidation = false;
         }
     }
     // 이메일 코드 인증 확인하기
@@ -302,8 +246,7 @@
     function ajaxWhatEmailSend(){
         const csrfToken = document.querySelector('meta[name="_csrf"]').getAttribute("content");
         const csrfHeader = document.querySelector('meta[name="_csrf_header"]').getAttribute("content");
-        const emailId = document.getElementById("emailId");
-        const emailAddress = document.getElementById("emailAddress");
+        const email = document.getElementById("email");
         let object = {};
         let xhr = new XMLHttpRequest();
 
@@ -319,8 +262,7 @@
             }
         }
 
-        object['emailId'] = emailId.value;
-        object['emailAddress'] = emailAddress.value;
+        object['email'] = email.value;
         // 객체 > JSON 문자열
         const params = JSON.stringify(object);
 
@@ -340,20 +282,15 @@
     }
     // 이메일 유효성 체크
     function emailValueCheck(){
-        const emailId = document.getElementById("emailId");
-        const emailAddress = document.getElementById("emailAddress");
-        const emailExample = document.getElementById("emailExample");
-        if (emailId.value != "" && emailAddress.value != "") {
+        const email = document.getElementById("email");
+        if (email.value != "") {
             emailCheckBtn.innerHTML = "이메일로 확인 코드를 보냈습니다.";
             emailCheckBtn.disabled = true;
-            emailExample.disabled = true;
-            emailId.disabled = true;
-            emailAddress.disabled = true;
+            email.disabled = true;
             return true;
         } else {
-            alert("이메일 양식에 빈칸이 존재합니다.\n양식을 채워주시기 바랍니다.");
-            if (emailId.value == "") { emailId.focus(); }
-            else { emailAddress.focus(); }
+            alert("이메일은 필수 입력입니다.\n양식을 채워주시기 바랍니다.");
+            email.focus();
             return false;
         }
     }
@@ -363,8 +300,7 @@
     }
     // 이메일 초기 세팅
     function emailInitialSetting(){
-        const emailId = document.getElementById("emailId");
-        const emailExample = document.getElementById("emailExample");
+        const email = document.getElementById("email");
         const emailCodeInput = document.getElementById("emailCodeInput");
 
         rewriteBtn.style.display = "none";
@@ -372,24 +308,8 @@
 
         emailCheckBtn.disabled = false;
         emailCheckBtn.innerText = "확인 코드 보내기";
-        emailId.disabled = false;
-        emailExample.disabled = false;
-
+        email.disabled = false;
         emailCodeInput.value = "";
-
-        selectBoxChange();
-    }
-    // 이메일 주소 고르기
-    function selectBoxChange(){
-        const emailAddress = document.getElementById("emailAddress");
-        let value = emailExample.value;
-        if ( value == 'none') {
-            emailAddress.disabled = false;
-            emailAddress.value = "";
-        } else {
-            emailAddress.disabled = true;
-            emailAddress.value = emailExample.value;
-        }
     }
     //이미지 변경 함수
     function changeLogo(){
@@ -400,6 +320,10 @@
         let newLogoNum = (logoNum+1)%4;
         const newSrc = frontSrc + newLogoNum + backSrc;
         logo.setAttribute("src", newSrc);
+    }
+    // 로그인 페이지 돌아가기
+    function goToLoginPage(){
+        window.location.href = "/login";
     }
 </script>
 </body>

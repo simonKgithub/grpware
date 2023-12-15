@@ -1,5 +1,6 @@
 package com.study.grpware.util.email;
 
+import com.study.grpware.member.MemberDto;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -12,11 +13,11 @@ public class EmailService {
     /**
      * 참고블로그: https://blog.naver.com/indoubt/222901617791
      */
-    public String emailCheck(EmailDto emailDto) {
+    public String emailCheck(MemberDto memberDto) {
         String code = this.codeGenerate();
 
         String senderName = "스터디 | 회원가입";
-        String receiver = emailDto.getEmailId() + emailDto.getEmailAddress();
+        String receiver = memberDto.getEmail();
         String subject = "이메일 인증 확인 코드";
         String msg = "안녕하세요. 스터디 그룹웨어 회원 가입 인증 메일입니다." +
                 "\n\n아래 인증확인 코드를 사용하여 가입을 진행해주세요." +

@@ -1,5 +1,6 @@
 package com.study.grpware.util.email;
 
+import com.study.grpware.member.MemberDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -13,7 +14,7 @@ public class EmailController {
 
     @PostMapping("/check")
     @ResponseBody
-    public String ajaxWhatEmailCheck(@RequestBody EmailDto emailDto) {
-        return emailService.emailCheck(emailDto);
+    public String ajaxWhatEmailCheck(@RequestBody MemberDto memberDto) {
+        return emailService.emailCheck(memberDto);
     }
 }

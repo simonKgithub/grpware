@@ -21,17 +21,17 @@ public class MemberController {
 
     @GetMapping("/memberJoin")
     public String goToMemberJoinPage(Model model){
-        model.addAttribute("memberFormDto", new MemberFormDto());
+        model.addAttribute("memberDto", new MemberDto());
         return "member/memberJoinForm";
     }
 
     @PostMapping("/memberJoin")
-    public String memberJoinProcess(@Valid MemberFormDto memberFormDto, BindingResult bindingResult, Model model){
+    public String memberJoinProcess(@Valid MemberDto memberDto, BindingResult bindingResult, Model model){
         if (bindingResult.hasErrors()) {
             return "member/memberJoinForm";
         }
         try {
-            MemberFormDto savedDto = memberService.registerMember(memberFormDto, passwordEncoder);
+            MemberDto savedDto = memberService.registerMember(memberDto, passwordEncoder);
         } catch (IllegalStateException e) {
             model.addAttribute("errorMessage", e.getMessage());
             return "member/memberJoinForm";
