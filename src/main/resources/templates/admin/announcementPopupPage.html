@@ -27,8 +27,8 @@
         <!-- body -->
         <div class="container-fluid">
             <!--값이 있는 경우-->
-            <div class="row" th:each="announcementDto : ${announcementDtoList}">
-                <div class="card mb-3 me-3" style="width: 18rem;">
+            <div class="row">
+                <div class="card mb-3 me-3" style="width: 18rem;" th:each="announcementDto : ${announcementDtoList}">
                     <div class="opacity-50 rounded mt-3" style="background-color: rgb(0 0 0);height: 200px;display: flex;justify-content: center;align-items: center;color: white;">no image</div>
                     <div class="card-body">
                         <h5 class="card-title" th:text="*{announcementDto.annoTitle}">Card title</h5>

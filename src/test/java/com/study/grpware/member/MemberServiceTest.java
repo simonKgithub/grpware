@@ -22,15 +22,44 @@ class MemberServiceTest {
     @Autowired PasswordEncoder passwordEncoder;
 
     @Test
+    @DisplayName("비밀번호 유효성 체크(통과)")
+    void passwordValidationTest(){
+        MemberDto memberDto = this.createMember();
+        memberDto.setPassword("qlalfqjsgh1!");
+        MemberDto savedDto = memberService.registerMember(memberDto, passwordEncoder);
+
+        assertEquals(memberDto.getEmail(), savedDto.getEmail());
+        assertEquals(memberDto.getMemberName(), savedDto.getMemberName());
+        assertEquals(memberDto.getMemberNumber(), savedDto.getMemberNumber());
+        assertEquals(memberDto.getMemberBirth(), savedDto.getMemberBirth());
+//        assertEquals(memberDto.getRole(), savedDto.getRole());
+    }
+
+    @Test
+    @DisplayName("비밀번호 유효성 체크(오류던짐)")
+    void passwordValidationThrowTest(){
+        MemberDto memberDto = this.createMember();
+//        memberDto.setPassword("12345a!"); //8자 이하
+//        memberDto.setPassword("aaaaaaa!"); //숫자 미포함
+        memberDto.setPassword("1234567a"); //특수문자 미포함
+
+        Throwable e = assertThrows(IllegalStateException.class, () -> {
+            memberService.registerMember(memberDto, passwordEncoder);
+        });
+
+        assertEquals("비밀번호는 최소 8자 이상, 숫자, 특수문자가 포함되어야 합니다.", e.getMessage());
+    }
+
+    @Test
     @DisplayName("임시 비밀번호 불일치 테스트")
     void tmpPasswordTest(){
         // 회원가입 양식으로 회원가입 함
         Member dto1 = createMemberForm();
-        MemberFormDto formDto1 = MemberFormDto.of(dto1);
-        MemberFormDto newDto1 = memberService.registerMember(formDto1, passwordEncoder);
+        MemberDto formDto1 = MemberDto.of(dto1);
+        MemberDto newDto1 = memberService.registerMember(formDto1, passwordEncoder);
 
         // 방금 가입한 회원을 이메일로 검색
-        Member origin = memberRepository.findByEmail(newDto1.getEmailId() + newDto1.getEmailAddress());
+        Member origin = memberRepository.findByEmail(newDto1.getEmail());
         MemberDto ori = MemberDto.of(origin);
 
         // 비밀번호 찾으면서 변경
@@ -51,9 +80,9 @@ class MemberServiceTest {
     void findMember() {
         Member member1 = createMemberForm();
         Member member2 = createMemberForm();
-        MemberFormDto formDto1 = MemberFormDto.of(member1);
-        MemberFormDto formDto2 = MemberFormDto.of(member2);
-        MemberFormDto savedDto1 = memberService.registerMember(formDto1, passwordEncoder);
+        MemberDto formDto1 = MemberDto.of(member1);
+        MemberDto formDto2 = MemberDto.of(member2);
+        MemberDto savedDto1 = memberService.registerMember(formDto1, passwordEncoder);
 
         Throwable e = assertThrows(IllegalStateException.class, () -> {
             memberService.registerMember(formDto2, passwordEncoder);
@@ -80,21 +109,18 @@ class MemberServiceTest {
         memberDto.setEmail("email@address");
         memberDto.setPassword("1234");
         memberDto.setMemberName("dingko");
-        memberDto.setMemberNumber("010-4153-9702");
-        memberDto.setMemberBirth("1994-06-14");
+        memberDto.setMemberNumber("01041539702");
+        memberDto.setMemberBirth("19940614");
         return memberDto;
     }
 
     private Member createMemberForm(){
-        MemberFormDto memberFormDto = new MemberFormDto();
-        memberFormDto.setEmailId("email");
-        memberFormDto.setEmailAddress("@address");
-        memberFormDto.setPassword("1234");
-        memberFormDto.setMemberName("dingko");
-        memberFormDto.setMemberNumber("010-4153-9702");
-        memberFormDto.setBirthYYYY("1994");
-        memberFormDto.setBirthMM("06");
-        memberFormDto.setBirthDD("14");
-        return Member.createMember(memberFormDto, passwordEncoder);
+        MemberDto memberDto = new MemberDto();
+        memberDto.setEmail("email@address");
+        memberDto.setPassword("1234");
+        memberDto.setMemberName("dingko");
+        memberDto.setMemberNumber("01041539702");
+        memberDto.setMemberBirth("19940614");
+        return Member.createMember(memberDto, passwordEncoder);
     }
 }

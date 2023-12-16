@@ -2,12 +2,12 @@
 <html xmlns:th="http://www.thymeleaf.org"
       xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
 >
-<div th:fragment="header">
-    <nav class="navbar navbar-expand-lg bg-body-tertiary">
+<header th:fragment="header">
+    <nav class="navbar navbar-expand-lg bg-body-tertiary" style="border-bottom: 1px solid #dee2e6">
         <div class="container-fluid">
             <a class="navbar-brand" href="/">
                 <img src="/images/main/intersect.svg" alt="" width="52" height="37" class="d-inline-block align-text-top">
-                Study Groupware
+                One Million Study
             </a>
             <a class="navbar-brand" href="#">
                 <span class="navbar-text" data-bs-toggle="offcanvas" data-bs-target="#offcanvasWithBothOptions" aria-controls="offcanvasWithBothOptions">
@@ -19,7 +19,7 @@
     </nav>
     <!--오른쪽 오프캔버스-->
     <div class="offcanvas offcanvas-end " data-bs-scroll="true" tabindex="-1" id="offcanvasWithBothOptions" aria-labelledby="offcanvasWithBothOptionsLabel">
-        <div class="offcanvas-header">
+        <div class="offcanvas-header" style="border-bottom: 1px solid #dee2e6">
             <h5 class="offcanvas-title" id="offcanvasWithBothOptionsLabel">
                 <span th:text="${#authentication.getPrincipal().getMemberName()}"></span>님! 반가워요😊
             </h5>
@@ -31,5 +31,5 @@
             <p>내 블로그</p>
         </div>
     </div>
-</div>
+</header>
 </html>

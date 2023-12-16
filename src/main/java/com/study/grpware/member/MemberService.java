@@ -2,6 +2,7 @@ package com.study.grpware.member;
 
 import com.study.grpware.util.email.EmailService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -100,7 +101,6 @@ public class MemberService implements UserDetailsService {
         if (byEmail == null) {
             throw new UsernameNotFoundException(email);
         }
-
         return byEmail;
     }
 }

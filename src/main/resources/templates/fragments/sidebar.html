@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org"
       xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
-    <div th:fragment="sidebar" id="sidebar">
+    <aside th:fragment="sidebar" id="sidebar">
         <div class="flex-shrink-0 p-3">
             <ul class="list-unstyled ps-0">
                 <li class="mb-1">
@@ -61,31 +61,5 @@
                 </li>
             </ul>
         </div>
-        <!--11111
-        <ul class="nav flex-column">
-            <li class="nav-item">
-                <a class="nav-link active" href="#">메뉴 1</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="#">메뉴 2</a>
-            </li>
-            <div class="accordion" id="accordionExample" sec:authorize="hasAnyAuthority('ROLE_ADMIN')">
-                <div class="accordion-item">
-                    <h2 class="accordion-header">
-                        <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
-                            <img src="/images/main/gear.svg" alt="" width="42" height="27" class="d-inline-block align-text-top"> System Setting
-                        </button>
-                    </h2>
-                    <div id="collapseOne" class="accordion-collapse collapse show" data-bs-parent="#accordionExample">
-                        <div class="accordion-body">
-                            <a class="nav-link" href="/admin/announceWithPopup">공지 팝업 관리</a>
-                        </div>
-                        <div class="accordion-body">
-                            #2
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </ul>-->
-    </div>
+    </aside>
 </html>

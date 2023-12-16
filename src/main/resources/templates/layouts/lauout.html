@@ -17,51 +17,23 @@
     <th:block layout:fragment="script"></th:block>
     <th:block layout:fragment="css"></th:block>
 
-    <style>
-        /* 사이드바 커스텀 스타일링 */
-        .sidebar {
-            background-color: #f8f9fa;
-            height: 90vh;
-            overflow-y: auto;
-        }
-    </style>
-    <script>
-        window.onload = function(){
-            // 처음 로드 시 resize 적용
-            const event = new Event('resize');
-            window.dispatchEvent(event);
-        }
-        //화면 크기 변경 시 사이드바 높이 조정(모바일버전)
-        window.addEventListener('resize', function () {
-            let sidebar = document.getElementById('sidebar');
-            if (window.innerWidth < 768) {
-                sidebar.style.height = '100%';
-            } else {
-                sidebar.style.height = '90vh';
-            }
-        });
-    </script>
+    <link rel="stylesheet" href="/css/layout.css">
 </head>
+<style>
+</style>
 
 <body>
     <!-- 헤더 -->
-    <div th:replace="fragments/header::header"></div>
-
-    <div class="container-fluid">
-        <div class="row">
-            <!-- 사이드바 -->
-            <div class="col-md-3 sidebar" id="sidebar">
-                <div th:replace="fragments/sidebar::sidebar"></div>
-            </div>
-            <!-- 메인 콘텐츠 -->
-            <div class="col-md-9">
-                <div layout:fragment="content"></div>
-            </div>
-        </div>
-    </div>
+    <header th:replace="fragments/header::header"></header>
+    <!--사이드바 & 콘텐츠-->
+    <main>
+        <aside th:replace="fragments/sidebar::sidebar"></aside>
+        <section>
+            <div layout:fragment="content"></div>
+        </section>
+    </main>
     <!-- 푸터 -->
-    <div th:replace="fragments/footer::footer"></div>
-
+    <footer th:replace="fragments/footer::footer"></footer>
 </body>
 
 </html>

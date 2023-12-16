@@ -1,8 +1,7 @@
 package com.study.grpware.member;
 
 import com.study.grpware.constant.Role;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -17,7 +16,11 @@ import java.util.List;
 @Table(name = "member")
 @Getter
 @Setter
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class Member implements UserDetails {
+
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "member_id")
@@ -41,16 +44,24 @@ public class Member implements UserDetails {
     @Enumerated(EnumType.STRING)
     private Role role;
 
+    /**
+     * Builder 패턴 적용
+     * 프로젝트 open 시 Member 객체가 처음 초기화 되므로, Role 객체로 초기화하여 적용해줘야 함
+     * 따라서, @AllArgsConstructor 를 써서 자동 생성 및 주입을 시켜줌
+     * @param memberDto
+     * @param passwordEncoder
+     * @return
+     */
     public static Member createMember(MemberDto memberDto, PasswordEncoder passwordEncoder) {
-        Member member = new Member();
-        member.setEmail(memberDto.getEmail());
         String encodedPassword = passwordEncoder.encode(memberDto.getPassword());
-        member.setPassword(encodedPassword);
-        member.setMemberName(memberDto.getMemberName());
-        member.setMemberNumber(memberDto.getMemberNumber());
-        member.setMemberBirth(memberDto.getMemberBirth());
-        member.setRole(Role.USER);
-        return member;
+        return Member.builder()
+                .email(memberDto.getEmail())
+                .password(encodedPassword)
+                .memberName(memberDto.getMemberName())
+                .memberNumber(memberDto.getMemberNumber())
+                .memberBirth(memberDto.getMemberBirth())
+                .role(Role.USER)
+                .build();
     }
 
     @Override
