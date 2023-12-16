@@ -16,7 +16,7 @@ main{
   margin-bottom: 0; /* main의 아래쪽 마진을 0으로 설정 */
 }
 aside{
-  width: 250px;
+  width: 280px;
   background-color: #f8f9fa;
 }
 section{
@@ -37,6 +37,24 @@ a{
   color: inherit; /* 부모 요소의 글자색 상속 */
 }
 
+/*sidebar*/
+aside .menu{
+  padding: 20px;
+}
+aside .menu li button{
+  font-size: 18px;
+  margin-left: -25px;
+}
+aside .menu li ul li a{
+  font-size: 16px;
+  padding: 1px;
+  display: inline-block;
+}
+aside .menu li button img{
+  width: 32px;
+  height: 17px;
+}
+
 /*footer*/
 footer .bottom{
   /*overflow: hidden;*/ /* 드롭다운 버튼 숨겨져서 처리 */
@@ -49,7 +67,6 @@ footer .bottom.copy{
   margin: 0px 20px;
   float: right;
 }
-
 footer .bottom.blog button{
   border: none;
 }
