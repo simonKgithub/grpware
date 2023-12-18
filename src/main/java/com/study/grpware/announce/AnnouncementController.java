@@ -37,20 +37,25 @@ public class AnnouncementController {
     private final FileService fileService;
     private final AnnouncementService announcementService;
 
-    @GetMapping("/announceWithPopup")
-    public String goToAnnouncementPage(Model model){
-        //공지사항 내용 가져오기
-        List<AnnouncementEntity> announcementEntityList = announcementService.findAll();
-        List<AnnouncementDto> announcementDtoList = new ArrayList<>();
-        if (announcementEntityList.size() > 0) {
-            announcementEntityList.forEach( entity -> {
-                announcementDtoList.add(AnnouncementDto.of(entity));
-            });
+    /**
+     * 공지사항 팝업 화면 띄우기
+     * @param annoId
+     * @param model
+     * @return
+     */
+    @GetMapping("/popup/{annoId}")
+    public String openPopup(@PathVariable Long annoId, Model model) {
+        AnnouncementEntity annoEntity = announcementService.findById(annoId);
+        // 첨부파일 처리
+        if (annoEntity.getFileEntity() != null) {
+            FileEntity fileEntity = fileService.findByFileId(annoEntity.getFileEntity().getFileId());
+            //첨부파일도 모델에 넣도록 조치를 취해야 한다.(DB연결 후 첨부파일 관리 시 실행)
         }
-        model.addAttribute("announcementDtoList", announcementDtoList);
-        return "announcement/announcementPopupPage";
-    }
+        AnnouncementDto announcementDto = AnnouncementDto.of(annoEntity);
+        model.addAttribute("announcementDto", announcementDto);
 
+        return "/announcement/announcePopup";
+    }
     /**
      * 공지사항 삭제
      * @param announcementDto
@@ -133,6 +138,25 @@ public class AnnouncementController {
         response.put("redirectUrl", "/announcement/announceWithPopup");
 
         return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    /**
+     * 공지사항 관리 화면 이동
+     * @param model
+     * @return
+     */
+    @GetMapping("/announceWithPopup")
+    public String goToAnnouncementPage(Model model){
+        //공지사항 내용 가져오기
+        List<AnnouncementEntity> announcementEntityList = announcementService.findAll();
+        List<AnnouncementDto> announcementDtoList = new ArrayList<>();
+        if (announcementEntityList.size() > 0) {
+            announcementEntityList.forEach( entity -> {
+                announcementDtoList.add(AnnouncementDto.of(entity));
+            });
+        }
+        model.addAttribute("announcementDtoList", announcementDtoList);
+        return "announcement/announcementPopupPage";
     }
 
     private List<Map<String, Object>> getErrors(BindingResult bindingResult) {

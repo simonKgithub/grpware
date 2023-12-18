@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<head>
+    <meta charset="UTF-8">
+    <title>공지사항</title>
+    <link rel="icon" type="image/x-icon" href="/images/favicon.svg">
+
+    <!--_csrf token-->
+    <meta name="_csrf" th:content="${_csrf.token}">
+    <meta name="_csrf_header" th:content="${_csrf.headerName}">
+
+    <link href="/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/css/sign-in.css" rel="stylesheet">
+    <style>
+        span{
+            width: 80px;
+        }
+    </style>
+</head>
+<body class="bg-secondary-subtle">
+    <div class="p-3" th:object="${announcementDto}">
+        <div class="input-group">
+            <span class="input-group-text">제목</span>
+            <input type="text" class="form-control" id="annoTitle" th:field="*{annoTitle}" readonly>
+        </div>
+        <div class="input-group">
+            <span class="input-group-text">등록자</span>
+            <input type="text" class="form-control" id="registrant" th:field="*{registrant}" readonly>
+        </div>
+        <div class="input-group mb-4">
+            <span class="input-group-text">내용</span>
+            <textarea class="form-control" aria-label="With textxarea" id="annoContents" th:field="*{annoContents}" cols="30" rows="10" readonly></textarea>
+        </div>
+        <div class="input-group">
+            <input type="text" value="오늘 하루 이 팝업 안보기" class="form-control" readonly>
+            <div class="input-group-text">
+                <input class="form-check-input" type="checkbox" value="" aria-label="Checkbox">
+            </div>
+            <button class="btn btn-sm btn-danger">Close</button>
+        </div>
+    </div>
+</body>
+
+</html>

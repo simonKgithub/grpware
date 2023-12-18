@@ -4,7 +4,29 @@
         layout:decorate="~{layouts/lauout}">
 
     <div layout:fragment="content">
-        메인화면입니당그리그리
-    </div>
 
+
+
+
+        <script th:inline="javascript">
+            /** 화면 맨 처음 로드 시 */
+            document.addEventListener("DOMContentLoaded", function(){
+                //공지사항 팝업 띄우기
+                const announcementDtoList = [[${announcementDtoList}]];
+                announcementDtoList.forEach((a, index) => {
+                    openPopup(a, index);
+                });
+            })
+
+
+            /** 함수 정의 */
+            // 팝업창 열기
+            function openPopup(a, index){
+                const annoId = Number(a.annoId);
+                const popupUrl = "/announcement/popup/" + annoId;
+                const width = 350, height = 350, left = index*20, top= index*20;
+                window.open(popupUrl, "_blank", "width=" + width + ",height=" + height + ",left=" + left + ",top=" + top);
+            }
+        </script>
+    </div>
 </html>

@@ -60,4 +60,13 @@ public class AnnouncementService {
         announcementRepository.delete(entity);
         return new ResponseEntity<>("해당 공지사항이 삭제되었습니다.",HttpStatus.OK);
     }
+
+    /**
+     * 조회(단건): 공지 사항
+     * @param annoId
+     * @return
+     */
+    public AnnouncementEntity findById(Long annoId) {
+        return announcementRepository.findById(annoId).orElseThrow(EntityNotFoundException::new);
+    }
 }

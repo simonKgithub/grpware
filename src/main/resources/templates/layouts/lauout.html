@@ -19,21 +19,18 @@
 
     <link rel="stylesheet" href="/css/layout.css">
 </head>
-<style>
-</style>
-
 <body>
     <!-- 헤더 -->
-    <header th:replace="fragments/header::header"></header>
+    <header th:replace="fragments/header"></header>
     <!--사이드바 & 콘텐츠-->
     <main>
-        <aside th:replace="fragments/sidebar::sidebar"></aside>
+        <aside th:replace="fragments/sidebar"></aside>
         <section>
             <div layout:fragment="content"></div>
         </section>
     </main>
     <!-- 푸터 -->
-    <footer th:replace="fragments/footer::footer"></footer>
+    <footer th:replace="fragments/footer"></footer>
 </body>
 
 </html>
