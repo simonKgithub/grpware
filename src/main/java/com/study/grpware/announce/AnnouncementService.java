@@ -5,9 +5,11 @@ import com.study.grpware.util.file.FileEntity;
 import com.study.grpware.util.file.FileService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
+import javax.persistence.EntityNotFoundException;
 import java.util.List;
 
 @Service
@@ -35,5 +37,27 @@ public class AnnouncementService {
         entity.setRegDate(CommonUtils.getNow());
 
         return announcementRepository.save(entity);
+    }
+
+    /**
+     * 공지사항 삭제
+     * @param announcementDto
+     * @return
+     */
+    public ResponseEntity<String> deleteAnnouncement(AnnouncementDto announcementDto) {
+        AnnouncementEntity entity = announcementRepository.findById(announcementDto.getAnnoId()).orElseThrow(EntityNotFoundException::new);
+
+        //파일 존재 시 파일도 함께 삭제
+        FileEntity fileEntity = entity.getFileEntity();
+        if (fileEntity != null) {
+            FileEntity byFileId = fileService.findByFileId(fileEntity.getFileId());
+            try {
+                fileService.deleteFile(byFileId.getFileOriPath());
+            } catch (Exception e) {
+                return new ResponseEntity<>("공지사항 삭제 중 오류(파일부분)가 발생하였습니다.", HttpStatus.NOT_IMPLEMENTED);
+            }
+        }
+        announcementRepository.delete(entity);
+        return new ResponseEntity<>("해당 공지사항이 삭제되었습니다.",HttpStatus.OK);
     }
 }

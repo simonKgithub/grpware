@@ -1,8 +1,5 @@
-package com.study.grpware.admin;
+package com.study.grpware.announce;
 
-import com.study.grpware.announce.AnnouncementDto;
-import com.study.grpware.announce.AnnouncementEntity;
-import com.study.grpware.announce.AnnouncementService;
 import com.study.grpware.util.file.FileDto;
 import com.study.grpware.util.file.FileEntity;
 import com.study.grpware.util.file.FileService;
@@ -30,7 +27,7 @@ import java.util.stream.Collectors;
 @Controller
 @RequiredArgsConstructor
 @Slf4j
-@PreAuthorize("hasRole('ADMIN')")
+@PreAuthorize("hasRole('ADMIN')")/* Admin 만 접근 가능 */
 @RequestMapping(value = "/announcement")
 public class AnnouncementController {
 
@@ -55,14 +52,13 @@ public class AnnouncementController {
     }
 
     /**
-     * 공지팝업삭제
+     * 공지사항 삭제
      * @param announcementDto
      */
     @PostMapping("/deleteAnnouncement")
     @ResponseBody
     public ResponseEntity<String> deleteAnnouncement(@RequestBody AnnouncementDto announcementDto) {
-
-        return null;
+        return announcementService.deleteAnnouncement(announcementDto);
     }
 
     /**

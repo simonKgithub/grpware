@@ -29,7 +29,6 @@
             <!--값이 있는 경우-->
             <div class="row">
                 <div class="card mb-3 me-3" style="width: 18rem; height: 26rem" th:each="announcementDto : ${announcementDtoList}">
-                    <div id="annoId" th:value="*{announcementDto.annoId}" hidden="hidden"></div>
                     <div class="opacity-50 rounded mt-3 card-img-top" style="background-color: rgb(0 0 0);height: 200px;display: flex;justify-content: center;align-items: center;color: white;">
                         no image
                     </div>
@@ -45,9 +44,10 @@
                         </div>
                         <div>
                             <span class="card-link" th:text="*{announcementDto.registrant}">등록자</span>
-                            <button class="btn btn-outline-danger float-end btn-sm" onclick="deleteAnnouncement">삭제</button>
+                            <button class="btn btn-outline-danger float-end btn-sm" onclick="deleteAnnouncement()">삭제</button>
                         </div>
                     </div>
+                    <div id="annoId" th:value="*{announcementDto.annoId}"></div>
                 </div>
             </div>
             <!--값이 없는 경우-->
@@ -58,8 +58,8 @@
                         <h5 class="card-title">Card title</h5>
                         <h6 class="card-subtitle mb-2 text-body-secondary">start ~ end day</h6>
                         <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-                        <a href="#" class="card-link">자세히 보기</a>
                         <span class="card-link">등록자</span>
+                        <a href="#" class="btn btn-outline-danger float-end btn-sm">삭제</a>
                     </div>
                 </div>
             </div>
@@ -178,16 +178,20 @@
             function deleteAnnouncement(){
                 const csrfToken = document.querySelector('meta[name="_csrf"]').getAttribute("content");
                 const csrfHeader = document.querySelector('meta[name="_csrf_header"]').getAttribute("content");
-                const annoId = document.getElementById('annoId').value;
+                const annoId = document.getElementById('annoId').getAttribute('value');
                 let xhr = new XMLHttpRequest();
                 let object = {};
 
                 xhr.onreadystatechange = function () {
                     if (xhr.readyState === XMLHttpRequest.DONE) {
                         if (xhr.status === 200) {
-                            alert("공지사항 팝업 삭제가 완료되었습니다.");
+                            const alt = xhr.response;
+                            alert(alt);
+                            window.location.reload();
                         } else {
-                            alert('공지사항 팝업 삭제 중 오류가 발생하였습니다.');
+                            const alt = xhr.response;
+                            alert(alt);
+                            window.location.reload();
                         }
                     }
                 }
