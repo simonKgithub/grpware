@@ -4,17 +4,17 @@
     <aside th:fragment="sidebar">
         <div class="menu">
             <ul class="list-unstyled ps-0">
-                <li class="mb-1">
+                <li class="mb-2">
                     <button class="btn d-inline-flex align-items-center rounded border-0" aria-expanded="false">
                         <a href="/">
-                            <img src="/images/main/house-door-fill.svg" alt="">
+                            <img src="/images/main/houseDoorFill.svg" alt="" class="d-inline-block align-text-top">
                             Home
                         </a>
                     </button>
                 </li>
-                <li class="mb-1">
+                <li class="mb-2">
                     <button class="btn btn-toggle d-inline-flex align-items-center rounded border-0 collapsed" data-bs-toggle="collapse" data-bs-target="#todoList-collapse" aria-expanded="false">
-                        <img src="/images/main/list-check.svg" alt="">
+                        <img src="/images/main/listCheck.svg" alt="" class="d-inline-block align-text-top">
                         TodoList
                     </button>
                     <div class="collapse" id="todoList-collapse">
@@ -23,15 +23,14 @@
                         </ul>
                     </div>
                 </li>
-                <li class="border-top my-3"></li>
-                <li class="mb-1" sec:authorize="hasAnyAuthority('ROLE_ADMIN')">
+                <li class="border-top mb-2" sec:authorize="hasAnyAuthority('ROLE_ADMIN')">
                     <button class="btn btn-toggle d-inline-flex align-items-center rounded border-0 collapsed" data-bs-toggle="collapse" data-bs-target="#admin-collapse" aria-expanded="false">
                         <img src="/images/main/gear.svg" alt="" class="d-inline-block align-text-top">
                         Settings
                     </button>
                     <div class="collapse" id="admin-collapse">
                         <ul class="btn-toggle-nav fw-normal pb-1 small">
-                            <li><a href="/admin/announceWithPopup" class="link-body-emphasis d-inline-flex text-decoration-none rounded">공지사항 관리</a></li>
+                            <li><a href="/announcement/announceWithPopup" class="link-body-emphasis d-inline-flex text-decoration-none rounded">공지사항 관리</a></li>
                         </ul>
                     </div>
                 </li>

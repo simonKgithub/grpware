@@ -12,6 +12,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -29,8 +30,9 @@ import java.util.stream.Collectors;
 @Controller
 @RequiredArgsConstructor
 @Slf4j
-@RequestMapping(value = "/admin")
-public class AdminController {
+@PreAuthorize("hasRole('ADMIN')")
+@RequestMapping(value = "/announcement")
+public class AnnouncementController {
 
     @Value("${fileUploadLocation}")
     String fileUploadLocation;
@@ -38,13 +40,8 @@ public class AdminController {
     private final FileService fileService;
     private final AnnouncementService announcementService;
 
-    @GetMapping("/adminPage")
-    public String goToAdminPage(Model model){
-        return "/admin/adminPage";
-    }
-
     @GetMapping("/announceWithPopup")
-    public String goToPopupNoticePage(Model model){
+    public String goToAnnouncementPage(Model model){
         //공지사항 내용 가져오기
         List<AnnouncementEntity> announcementEntityList = announcementService.findAll();
         List<AnnouncementDto> announcementDtoList = new ArrayList<>();
@@ -54,7 +51,18 @@ public class AdminController {
             });
         }
         model.addAttribute("announcementDtoList", announcementDtoList);
-        return "admin/announcementPopupPage";
+        return "announcement/announcementPopupPage";
+    }
+
+    /**
+     * 공지팝업삭제
+     * @param announcementDto
+     */
+    @PostMapping("/deleteAnnouncement")
+    @ResponseBody
+    public ResponseEntity<String> deleteAnnouncement(@RequestBody AnnouncementDto announcementDto) {
+
+        return null;
     }
 
     /**
@@ -126,7 +134,7 @@ public class AdminController {
 
         announcementService.addAnnouncementPopup(announcementDto);
         response.put("success", true);
-        response.put("redirectUrl", "/admin/announceWithPopup");
+        response.put("redirectUrl", "/announcement/announceWithPopup");
 
         return new ResponseEntity<>(response, HttpStatus.OK);
     }

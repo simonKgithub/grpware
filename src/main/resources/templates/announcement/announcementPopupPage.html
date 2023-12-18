@@ -19,7 +19,7 @@
         </nav>
 
         <div class="d-grid gap-2 mb-3 d-md-flex justify-content-md-end">
-            <button type="button" class="btn btn-outline-secondary" data-bs-toggle="modal" data-bs-target="#exampleModal">
+            <button type="button" class="btn btn-outline-secondary" data-bs-toggle="modal" data-bs-target="#addAnnounceModal">
                 공지 팝업 추가
             </button>
         </div>
@@ -28,15 +28,25 @@
         <div class="container-fluid">
             <!--값이 있는 경우-->
             <div class="row">
-                <div class="card mb-3 me-3" style="width: 18rem;" th:each="announcementDto : ${announcementDtoList}">
-                    <div class="opacity-50 rounded mt-3" style="background-color: rgb(0 0 0);height: 200px;display: flex;justify-content: center;align-items: center;color: white;">no image</div>
-                    <div class="card-body">
-                        <h5 class="card-title" th:text="*{announcementDto.annoTitle}">Card title</h5>
-                        <h6 class="card-subtitle mb-2 text-body-secondary"><span th:text="*{announcementDto.startDate}">start</span>~<span th:text="*{announcementDto.endDate}">end</span> day</h6>
-                        <p class="card-text" th:text="*{announcementDto.annoContents}">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-                        <a href="#" class="card-link">Edit link</a>
-                        <a href="#" class="card-link">Delete link</a>
-                        <span class="card-link" th:text="*{announcementDto.registrant}">등록자</span>
+                <div class="card mb-3 me-3" style="width: 18rem; height: 26rem" th:each="announcementDto : ${announcementDtoList}">
+                    <div id="annoId" th:value="*{announcementDto.annoId}" hidden="hidden"></div>
+                    <div class="opacity-50 rounded mt-3 card-img-top" style="background-color: rgb(0 0 0);height: 200px;display: flex;justify-content: center;align-items: center;color: white;">
+                        no image
+                    </div>
+                    <div class="card-body overflow-hidden">
+                        <div class="card-title h5 mb-2 text-truncate" th:text="*{announcementDto.annoTitle}">Card title</div>
+                        <div class="card-subtitle mb-2 text-body-secondary">
+                            <span th:text="*{announcementDto.startDate}">start</span>
+                            ~
+                            <span th:text="*{announcementDto.endDate}">end</span>
+                        </div>
+                        <div class="card-text overflow-y-scroll mb-2" style="height: 5rem;" th:text="*{announcementDto.annoContents}">
+                            Some quick example text to build on the card title and make up the bulk of the card's content.
+                        </div>
+                        <div>
+                            <span class="card-link" th:text="*{announcementDto.registrant}">등록자</span>
+                            <button class="btn btn-outline-danger float-end btn-sm" onclick="deleteAnnouncement">삭제</button>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -48,19 +58,18 @@
                         <h5 class="card-title">Card title</h5>
                         <h6 class="card-subtitle mb-2 text-body-secondary">start ~ end day</h6>
                         <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-                        <a href="#" class="card-link">Edit link</a>
-                        <a href="#" class="card-link">Delete link</a>
+                        <a href="#" class="card-link">자세히 보기</a>
                         <span class="card-link">등록자</span>
                     </div>
                 </div>
             </div>
 
-            <!-- Modal -->
-            <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <!-- 공지용 팝업 추가 Modal -->
+            <div class="modal fade" id="addAnnounceModal" tabindex="-1" aria-labelledby="addAnnounceModalLabel" aria-hidden="true">
                 <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
                     <div class="modal-content">
                         <div class="modal-header">
-                            <h1 class="modal-title fs-5" id="exampleModalLabel">공지용 팝업 등록</h1>
+                            <h1 class="modal-title fs-5" id="addAnnounceModalLabel">공지용 팝업 등록</h1>
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" id="modalCloseBtn"></button>
                         </div>
                         <div class="modal-body">
@@ -127,8 +136,8 @@
             // 화면 벗어나면 정보 리셋 (닫기버튼, 모달화면 바깥버튼, 취소버튼, ESC)
             document.getElementById("modalCloseBtn").addEventListener("click", formReset); //닫기버튼
             document.getElementById("popupCancelBtn").addEventListener("click", formReset); //취소버튼
-            document.getElementById("exampleModal").addEventListener("click", function(event){ //모달화면 바깥 버튼
-                const modalContainer = document.getElementById("exampleModal");
+            document.getElementById("addAnnounceModal").addEventListener("click", function(event){ //모달화면 바깥 버튼
+                const modalContainer = document.getElementById("addAnnounceModal");
                 if (event.target === modalContainer) {
                     formReset();
                 }
@@ -165,6 +174,31 @@
             /**
              * 함수 정의
              */
+            // 공지사항 삭제
+            function deleteAnnouncement(){
+                const csrfToken = document.querySelector('meta[name="_csrf"]').getAttribute("content");
+                const csrfHeader = document.querySelector('meta[name="_csrf_header"]').getAttribute("content");
+                const annoId = document.getElementById('annoId').value;
+                let xhr = new XMLHttpRequest();
+                let object = {};
+
+                xhr.onreadystatechange = function () {
+                    if (xhr.readyState === XMLHttpRequest.DONE) {
+                        if (xhr.status === 200) {
+                            alert("공지사항 팝업 삭제가 완료되었습니다.");
+                        } else {
+                            alert('공지사항 팝업 삭제 중 오류가 발생하였습니다.');
+                        }
+                    }
+                }
+                object['annoId'] = Number(annoId);
+                const params = JSON.stringify(object);
+
+                xhr.open('POST', '/announcement/deleteAnnouncement', true);
+                xhr.setRequestHeader('Content-Type', 'application/json');
+                xhr.setRequestHeader(csrfHeader, csrfToken);
+                xhr.send(params);
+            }
             // 오류 메시지 클리어
             function targetClear(){
                 const targets = document.querySelectorAll('.fieldError');
@@ -198,7 +232,7 @@
                 const formData = new FormData(document.getElementById("modalForm"));
 
                 // AJAX로 서버에 데이터 전송
-                fetch('/admin/annoRegistration', {
+                fetch('/announcement/annoRegistration', {
                     method: 'POST',
                     body: formData,
                     headers: {
@@ -254,7 +288,7 @@
                 object['fileId'] = Number(fileId);
                 const params = JSON.stringify(object);
 
-                xhr.open('POST', '/admin/imagesDelete', true);
+                xhr.open('POST', '/announcement/imagesDelete', true);
                 xhr.setRequestHeader('Content-Type', 'application/json');
                 xhr.setRequestHeader(csrfHeader, csrfToken);
                 xhr.send(params);
@@ -292,7 +326,7 @@
                 object['fileId'] = Number(fileId);
                 const params = JSON.stringify(object);
 
-                xhr.open('POST', '/admin/imagesPreview', true);
+                xhr.open('POST', '/announcement/imagesPreview', true);
                 xhr.setRequestHeader('Content-Type', 'application/json');
                 xhr.setRequestHeader(csrfHeader, csrfToken);
                 xhr.send(params);
@@ -322,7 +356,7 @@
                     }
                     formData.append('file', file);
 
-                    xhr.open('POST', '/admin/imagesUpload', true);
+                    xhr.open('POST', '/announcement/imagesUpload', true);
                     xhr.setRequestHeader(csrfHeader, csrfToken);
                     xhr.send(formData);
                 }
@@ -352,7 +386,7 @@
 
                     formData.append('file', file);
 
-                    xhr.open('POST', '/admin/imagesValidation', true);
+                    xhr.open('POST', '/announcement/imagesValidation', true);
                     xhr.setRequestHeader(csrfHeader, csrfToken);
                     // xhr.setRequestHeader('Content-Type', 'application/json');
                     xhr.send(formData);

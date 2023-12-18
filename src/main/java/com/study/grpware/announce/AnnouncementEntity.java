@@ -18,6 +18,7 @@ public class AnnouncementEntity {
     private String annoTitle;
 
     @Column(name = "anno_contents")
+    @Lob
     private String annoContents;
 
     @Column(name = "start_date")
