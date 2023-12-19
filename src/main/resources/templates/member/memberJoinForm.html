@@ -13,6 +13,10 @@
     <link rel="icon" type="image/x-icon" href="/images/favicon.svg">
     <link href="/css/bootstrap.min.css" rel="stylesheet">
     <link href="/css/sign-in.css" rel="stylesheet">
+    <!--cdn from flatPickr-->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/ko.js"></script>
 </head>
 <body class="d-flex align-items-center py-4 bg-body-tertiary">
 
@@ -55,8 +59,8 @@
             <input type="text" class="form-control mb-2" id="memberName" name="memberName" th:field="*{memberName}" placeholder="홍길동" required="" maxlength="10">
             <label for="memberNumber" class="form-label">연락처</label>  <span th:errors="*{memberNumber}" class="error-message"></span>
             <input type="text" class="form-control mb-2" id="memberNumber" name="memberNumber" th:field="*{memberNumber}" placeholder="('-'없이 입력)" required="" maxlength="13">
-            <label for="memberBirth" class="form-label">생년월일(*8자리)</label>  <span th:errors="*{memberBirth}" class="error-message"></span>
-            <input type="text" class="form-control" id="memberBirth" name="memberBirth" th:field="*{memberBirth}" required="" placeholder="('-'없이 입력)" maxlength="10">
+            <label for="memberBirth" class="form-label">생년월일</label>  <span th:errors="*{memberBirth}" class="error-message"></span>
+            <input type="text" class="form-control" id="memberBirth" name="memberBirth" th:field="*{memberBirth}" required="" placeholder="1994-06-14" maxlength="10">
         </div>
         <hr>
         <div class="d-grid gap-2">
@@ -325,6 +329,18 @@
     function goToLoginPage(){
         window.location.href = "/login";
     }
+</script>
+<!-- flatpickr 설정 -->
+<script>
+    const memberBirthInput = document.getElementById('memberBirth');
+    flatpickr(memberBirthInput, {
+        dateFormat: 'Y-m-d',
+        enableTime: false,
+        maxDate: 'today',
+        defaultDate: ['1994-06-14'],
+        locale: 'ko',
+        disableMobile: true,      // 모바일 기기에서 위젯 비활성화
+    });
 </script>
 </body>
 </html>
