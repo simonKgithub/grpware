@@ -102,7 +102,7 @@
                                             <span class="input-group-text">~</span>
                                         </div>
                                         <div style="width: 46%;">
-                                            <input type="text" class="form-control" name="endDate" placeholder="종료일" aria-label="종료일">
+                                            <input type="text" class="form-control" id="endDate" name="endDate" placeholder="종료일" aria-label="종료일">
                                             <p data-error-field="endDate" class="fieldError">Incorrect data</p>
                                         </div>
                                     </div>
@@ -426,6 +426,28 @@
                     });
                 });
             }
+        </script>
+
+        <!-- flatpickr 설정 하기 -->
+        <script>
+            const startDateInput = document.getElementById('startDate');
+            const endDateInput = document.getElementById('endDate');
+            flatpickr(startDateInput, {
+                dateFormat: 'Y-m-d',
+                enableTime: false,
+                minDate: 'today',
+                defaultDate: 'today',
+                locale: 'ko',
+                disableMobile: true,      // 모바일 기기에서 위젯 비활성화
+            });
+            flatpickr(endDateInput, {
+                dateFormat: 'Y-m-d',
+                enableTime: false,
+                minDate: 'today',
+                defaultDate: 'today',
+                locale: 'ko',
+                disableMobile: true,      // 모바일 기기에서 위젯 비활성화
+            });
         </script>
     </div>
 </html>

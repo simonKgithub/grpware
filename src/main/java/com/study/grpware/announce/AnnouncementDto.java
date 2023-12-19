@@ -19,11 +19,11 @@ public class AnnouncementDto {
     private String annoContents;
 
     @NotBlank(message = "시작일은 필수입니다.")
-    @Length(min = 8, max = 8, message = "8자리로 입력해주세요")
+    @Length(min = 10, max = 10, message = "8자리로 입력해주세요")
     private String startDate;
 
     @NotBlank(message = "종료일은 필수입니다.")
-    @Length(min = 8, max = 8, message = "8자리로 입력해주세요")
+    @Length(min = 10, max = 10, message = "8자리로 입력해주세요")
     private String endDate;
 
     private Long fileId;

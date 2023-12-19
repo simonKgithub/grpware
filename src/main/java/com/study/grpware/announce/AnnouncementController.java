@@ -133,6 +133,9 @@ public class AnnouncementController {
             response.put("errors", getErrors(bindingResult)); //에러 반환
             return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
         }
+        //날짜 형식 변경 (2023-12-12 > 20231212)
+        announcementDto.setEndDate(announcementDto.getEndDate().replaceAll("-", ""));
+        announcementDto.setStartDate(announcementDto.getStartDate().replaceAll("-", ""));
 
         announcementService.addAnnouncementPopup(announcementDto);
         response.put("success", true);
