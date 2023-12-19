@@ -31,10 +31,11 @@ public class MemberDto {
 
     private Role role;
 
+    private boolean enabled;
+
     private static ModelMapper modelMapper = new ModelMapper();
 
     public static MemberDto of(Member member) {
         return modelMapper.map(member, MemberDto.class);
     }
-
 }

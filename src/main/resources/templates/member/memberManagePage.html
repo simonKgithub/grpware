@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+        layout:decorate="~{layouts/lauout}">
+
+    <div layout:fragment="content">
+        <div class="h6 text-body-secondary">그룹웨어 회원을 관리하는 화면입니다.</div>
+        <hr>
+        <table class="table table-striped table-hover table-border border-secondary caption-top">
+            <caption>그룹웨어 회원 목록</caption>
+            <thead class="table-warning">
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">이름</th>
+                <th scope="col">이메일</th>
+                <th scope="col">연락처</th>
+                <th scope="col">생년월일</th>
+                <th scope="col">역할</th>
+                <th scope="col">계정활성</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="memberDto, index : ${memberDtoList}">
+                <td th:text="*{index.index + 1}"></td>
+                <td th:text="*{memberDto.memberName}"></td>
+                <td id="email" th:value="*{memberDto.email}" th:text="*{memberDto.email}"></td>
+                <td th:text="*{memberDto.memberNumber}"></td>
+                <td th:text="*{memberDto.memberBirth}"></td>
+                <td th:text="*{memberDto.role}"></td>
+                <td>
+                    <div class="form-check form-switch">
+                        <input class="form-check-input" type="checkbox" th:checked="*{memberDto.enabled}" role="switch" id="flexSwitchCheck">
+                        <label class="form-check-label" for="flexSwitchCheck"></label>
+                    </div>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+
+        <script>
+            /** 이벤트 리스너 등록 */
+            // 사용자 접속권한 부여
+            document.getElementById('flexSwitchCheck').addEventListener('click', function(e){enabledChange(e);});
+
+            /** 함수 적용 */
+            // 사용자 계정 활성화
+            function enabledChange(e){
+                const csrfToken = document.querySelector('meta[name="_csrf"]').getAttribute("content");
+                const csrfHeader = document.querySelector('meta[name="_csrf_header"]').getAttribute("content");
+                const email = findTdNodes(e.target);
+                let xhr = new XMLHttpRequest();
+                let object = {};
+
+                xhr.onreadystatechange = function () {
+                    if (xhr.readyState === XMLHttpRequest.DONE) {
+                        if (xhr.status === 200) {
+                            alert(xhr.response);
+                        } else {
+                            alert(xhr.response);
+                        }
+                    }
+                }
+                object['email'] = email.getAttribute('value');
+                object['enabled'] = e.target.checked;
+                const params = JSON.stringify(object);
+
+                xhr.open('PATCH', '/member/enabledChange', true);
+                xhr.setRequestHeader('Content-Type', 'application/json');
+                xhr.setRequestHeader(csrfHeader, csrfToken);
+                xhr.send(params);
+            }
+            // 해당 row에서 찾고자하는 id 추출
+            function findTdNodes(target){
+                while (target && target.tagName !== 'TR') {
+                    target = target.parentNode;
+                }
+                if (target) {
+                    return Array.from(target.children).find(child => child.id);
+                }
+            }
+        </script>
+    </div>
+</html>

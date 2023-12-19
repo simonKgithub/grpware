@@ -34,7 +34,7 @@ public class CommonUtils {
 
     /**
      * 날짜를 뷰에 보기 좋도록 변경해준다.
-     * @param date(yyyyMMddHImmdd)
+     * @param date(yyyyMMddHImmdd -> yyyy.mm.dd)
      * @return
      */
     public static String changeDateFormat(String date) {
@@ -42,5 +42,26 @@ public class CommonUtils {
         String mm = date.substring(4, 6);
         String dd = date.substring(6, 8);
         return yyyy + "." + mm + "." + dd;
+    }
+
+    /**
+     * 핸드폰 번호를 보기 좋도록 변경해준다.
+     * @param phoneNumber(10112345567 -> 010-1234-5567)
+     * @return
+     */
+    public static String changeNumFormat(String phoneNumber) {
+        if (phoneNumber.length() == 11) {
+            String first = phoneNumber.substring(0, 3);//010
+            String second = phoneNumber.substring(3, 7);//1234
+            String third = phoneNumber.substring(7, 11);//1234
+            phoneNumber = first + "-" + second + "-" + third;
+        } else if(phoneNumber.length() == 10) {
+            String first = phoneNumber.substring(0, 3);//010
+            String second = phoneNumber.substring(3, 6);//123
+            String third = phoneNumber.substring(6, 10);//1234
+            phoneNumber = first + "-" + second + "-" + third;
+        }
+
+        return phoneNumber;
     }
 }

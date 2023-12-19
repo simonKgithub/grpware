@@ -44,6 +44,9 @@ public class Member implements UserDetails {
     @Enumerated(EnumType.STRING)
     private Role role;
 
+    @Column(name = "enabled")
+    private boolean enabled;
+
     /**
      * Builder 패턴 적용
      * 프로젝트 open 시 Member 객체가 처음 초기화 되므로, Role 객체로 초기화하여 적용해줘야 함
@@ -60,6 +63,7 @@ public class Member implements UserDetails {
                 .memberName(memberDto.getMemberName())
                 .memberNumber(memberDto.getMemberNumber())
                 .memberBirth(memberDto.getMemberBirth())
+                .enabled(false) //초기 가입 사용자는 접근 권한 없음
                 .role(Role.USER)
                 .build();
     }
@@ -93,6 +97,6 @@ public class Member implements UserDetails {
 
     @Override
     public boolean isEnabled() {
-        return true;
+        return this.enabled;
     }
 }

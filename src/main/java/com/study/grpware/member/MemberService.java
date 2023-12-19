@@ -2,7 +2,6 @@ package com.study.grpware.member;
 
 import com.study.grpware.util.email.EmailService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -10,6 +9,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -20,6 +20,14 @@ public class MemberService implements UserDetailsService {
 
     private final MemberRepository memberRepository;
     private final EmailService emailService;
+
+    /**
+     * 조회(다건): 회원
+     * @return
+     */
+    public List<Member> findAll(){
+        return memberRepository.findAll();
+    }
 
     /**
      * 회원등록 ( memberFormDto 진행됨)
@@ -102,5 +110,15 @@ public class MemberService implements UserDetailsService {
             throw new UsernameNotFoundException(email);
         }
         return byEmail;
+    }
+
+    /**
+     * 접근 권한 수정
+     * @param memberDto
+     */
+    public Member enabledChange(MemberDto memberDto) {
+        Member byEmail = memberRepository.findByEmail(memberDto.getEmail());
+        byEmail.setEnabled(memberDto.isEnabled());
+        return memberRepository.save(byEmail);
     }
 }

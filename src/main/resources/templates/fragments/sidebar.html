@@ -23,14 +23,17 @@
                         </ul>
                     </div>
                 </li>
-                <li class="border-top mb-2" sec:authorize="hasAnyAuthority('ROLE_ADMIN')">
+                <li class="border-top mb-2" sec:authorize="hasRole('ROLE_ADMIN')">
                     <button class="btn btn-toggle d-inline-flex align-items-center rounded border-0 collapsed" data-bs-toggle="collapse" data-bs-target="#admin-collapse" aria-expanded="false">
                         <img src="/images/main/gear.svg" alt="" class="d-inline-block align-text-top">
                         Settings
                     </button>
                     <div class="collapse" id="admin-collapse">
                         <ul class="btn-toggle-nav fw-normal pb-1 small">
-                            <li><a href="/announcement/announceWithPopup" class="link-body-emphasis d-inline-flex text-decoration-none rounded">공지사항 관리</a></li>
+                            <li><a href="/member/memberManage" class="link-body-emphasis d-inline-flex text-decoration-none rounded">회원 관리</a></li>
+                        </ul>
+                        <ul class="btn-toggle-nav fw-normal pb-1 small">
+                            <li><a href="/announcement/announceWithPopup" class="link-body-emphasis d-inline-flex text-decoration-none rounded">공지사항(팝업) 관리</a></li>
                         </ul>
                     </div>
                 </li>

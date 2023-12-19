@@ -28,6 +28,12 @@ public class LoginController {
         return "login/loginPage";
     }
 
+    @GetMapping("/login/accessDenied")
+    public String goToLoginPageWithAccessDenied(Model model){
+        model.addAttribute("accessDenied", "계정이 비활성화 상태입니다. 관리자에게 문의해주세요.");
+        return "login/loginPage";
+    }
+
     @GetMapping("/login/logout")
     public String logoutSuccess(Model model){
         model.addAttribute("logoutMsg", "로그아웃이 완료되었습니다.");
