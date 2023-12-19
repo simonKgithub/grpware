@@ -31,14 +31,37 @@
             <span class="input-group-text">내용</span>
             <textarea class="form-control" aria-label="With textxarea" id="annoContents" th:field="*{annoContents}" cols="30" rows="10" readonly></textarea>
         </div>
-        <div class="input-group">
-            <input type="text" value="오늘 하루 이 팝업 안보기" class="form-control" readonly>
-            <div class="input-group-text">
-                <input class="form-check-input" type="checkbox" value="" aria-label="Checkbox">
-            </div>
-            <button class="btn btn-sm btn-danger">Close</button>
-        </div>
+        <label for="todayCheck">오늘 하루 이 팝업 안보기
+            <input class="form-check-input float-end" id="todayCheck" type="checkbox" th:value="*{annoId}" aria-label="Checkbox">
+        </label>
+        <button class="btn btn-sm btn-danger float-end" onclick="popupClose()">Close</button>
     </div>
+    <script>
+        /** 이벤트 리스너 영역 */
+        // 브라우저 로드 시 팝업 노출 정보 확인
+        window.addEventListener('DOMContentLoaded', () => {
+            /*const cookies = document.cookie.split(';');
+            cookies.forEach(cookie => {
+                cookie = cookie.trim();
+                if (cookie.startsWith('hidePopup=')) {
+                    alert('오늘 하루 노출되지 않는 팝업');
+                }
+            });*/
+        });
+        // 브라우저 종료 시 오늘 하루 안보기 체크
+        window.addEventListener('beforeunload', () => {
+            const checkbox = document.getElementById('todayCheck');
+            if (checkbox.checked) {
+                window.opener.addCookie(checkbox.value);
+            }
+        });
+
+        /** 함수 정의 영역 */
+        // 팝업 종료 버튼
+        function popupClose(){
+            window.close();
+        }
+    </script>
 </body>
 
 </html>

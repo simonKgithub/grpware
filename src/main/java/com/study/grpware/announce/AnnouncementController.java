@@ -1,5 +1,6 @@
 package com.study.grpware.announce;
 
+import com.study.grpware.util.CommonUtils;
 import com.study.grpware.util.file.FileDto;
 import com.study.grpware.util.file.FileEntity;
 import com.study.grpware.util.file.FileService;
@@ -148,11 +149,16 @@ public class AnnouncementController {
     @GetMapping("/announceWithPopup")
     public String goToAnnouncementPage(Model model){
         //공지사항 내용 가져오기
-        List<AnnouncementEntity> announcementEntityList = announcementService.findAll();
+        List<AnnouncementEntity> announcementEntityList = announcementService.findAllByOrderByRegDateDesc();
         List<AnnouncementDto> announcementDtoList = new ArrayList<>();
         if (announcementEntityList.size() > 0) {
             announcementEntityList.forEach( entity -> {
-                announcementDtoList.add(AnnouncementDto.of(entity));
+                AnnouncementDto dto = AnnouncementDto.of(entity);
+                // 날짜 변환 후 넣어주기
+                dto.setRegDate(CommonUtils.changeDateFormat(dto.getRegDate()));
+                dto.setStartDate(CommonUtils.changeDateFormat(dto.getStartDate()));
+                dto.setEndDate(CommonUtils.changeDateFormat(dto.getEndDate()));
+                announcementDtoList.add(dto);
             });
         }
         model.addAttribute("announcementDtoList", announcementDtoList);

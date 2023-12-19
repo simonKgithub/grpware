@@ -18,8 +18,41 @@
                 });
             })
 
+            /** 이벤트 리스너 적용 */
+
 
             /** 함수 정의 */
+            // 오늘 하루 안보기 적용
+            function addCookie(value){
+                let expiredDate = new Date();
+                expiredDate.setDate(expiredDate.getDate() + 1); // 다음날 보이기
+                expiredDate.setHours(0, 0, 0, 0); // 다음날 00시부터는 보일 수 있도록 하기
+                //쿠키 가져오기 (중복제외)
+                let hideCookie = getCookie('hidePopup');
+                if (hideCookie) {
+                    hideCookie = hideCookie.replace('undefined', '');
+                    const newCookie = hideCookie + "-" + value;
+                    document.cookie = 'hidePopup=' + newCookie + "; expires=" + expiredDate + "; path=/";
+                } else {
+                    //초기설정
+                    document.cookie = 'hidePopup=' + value + "; expires=" + expiredDate + "; path=/";
+                }
+            }
+            // 쿠키 가져오기
+            function getCookie(cookieName){
+                let cookies = document.cookie.split(';');
+                /** 여기서 getCookie 를 undefined 해버림, 문제를 찾아봐야 함
+                 * => foreach 는 돌다가 중간에 return 되면 정상적으로 종료되지 않음
+                 * => for 문을 사용하여 완료된 후 return 값을 지정해줌으로 해결
+                 * */
+                for (let i = 0; i < cookies.length; i++) {
+                    let cookie = cookies[i].trim();
+                    if (cookie.startsWith(cookieName + '=')) {
+                        return cookie.substring(cookieName.length + 1);
+                    }
+                }
+                return undefined; //없으면 undefined 반환
+            }
             // 팝업창 열기
             function openPopup(a, index){
                 const annoId = Number(a.annoId);

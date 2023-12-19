@@ -19,8 +19,8 @@ public class AnnouncementService {
     private final AnnouncementRepository announcementRepository;
     private final FileService fileService;
 
-    public List<AnnouncementEntity> findAll(){
-        return announcementRepository.findAll();
+    public List<AnnouncementEntity> findAllByOrderByRegDateDesc(){
+        return announcementRepository.findAllByOrderByRegDateDesc();
     }
 
     public AnnouncementEntity addAnnouncementPopup(AnnouncementDto announcementDto) {
@@ -68,5 +68,15 @@ public class AnnouncementService {
      */
     public AnnouncementEntity findById(Long annoId) {
         return announcementRepository.findById(annoId).orElseThrow(EntityNotFoundException::new);
+    }
+
+    /**
+     * 조회(다건): 공지 사항
+     * 조건: 설정 날짜 사이에 있는 공지사항만 표출
+     * @return
+     */
+    public List<AnnouncementEntity> findAllByStartAndEndDate() {
+        String yyyymmdd = CommonUtils.getNow().substring(0, 8);
+        return announcementRepository.findAllByStartAndEndDate(yyyymmdd);
     }
 }

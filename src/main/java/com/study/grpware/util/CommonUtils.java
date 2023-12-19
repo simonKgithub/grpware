@@ -4,6 +4,7 @@ import com.study.grpware.member.Member;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 
+import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
@@ -29,5 +30,17 @@ public class CommonUtils {
     public static String getNow(){
         LocalDateTime now = LocalDateTime.now();
         return now.format(DateTimeFormatter.ofPattern("yyyyMMddHHmmss"));
+    }
+
+    /**
+     * 날짜를 뷰에 보기 좋도록 변경해준다.
+     * @param date(yyyyMMddHImmdd)
+     * @return
+     */
+    public static String changeDateFormat(String date) {
+        String yyyy = date.substring(0, 4);
+        String mm = date.substring(4, 6);
+        String dd = date.substring(6, 8);
+        return yyyy + "." + mm + "." + dd;
     }
 }
