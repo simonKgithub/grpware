@@ -4,9 +4,22 @@
         layout:decorate="~{layouts/lauout}">
 
     <div layout:fragment="content">
-
-
-
+        <style>
+            .attend{
+                width: 100px;
+                height: 100px;
+                text-align: center;
+            }
+            .attend a{
+                display: inline-block;
+            }
+        </style>
+        <div class="attend">
+            <a href="#">
+                <img class="attend" id="attendCheck" src="/images/main/attend-yet.png" alt="created by syafii5758 - Flaticon">
+                출석체크
+            </a>
+        </div>
 
         <script th:inline="javascript">
             /** 화면 맨 처음 로드 시 */
@@ -19,9 +32,15 @@
             })
 
             /** 이벤트 리스너 적용 */
-
+            //출석체크 클릭
+            document.getElementById('attendCheck').addEventListener('click', attendCheckProcess);
 
             /** 함수 정의 */
+            // 출석체크 하기
+            function attendCheckProcess(){
+                // 위치 정보 파악 (위상, 고도)
+                // 오차범위 이내 들어오면 ok or 아니면 안됨
+            }
             // 오늘 하루 안보기 적용
             function addCookie(value){
                 let expiredDate = new Date();
