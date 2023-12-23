@@ -1,13 +1,13 @@
 package com.study.grpware.attendance;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
@@ -19,6 +19,27 @@ public class AttendanceController {
 
     final private AttendanceService attendanceService;
 
+    /**
+     * 출석 체크: 출석 지정 범위 약 70m 이내에만 유효함
+     */
+    @PostMapping("/attendCheck")
+    @ResponseBody
+    public ResponseEntity<String> attendCheck(@RequestBody AttendanceDto attendanceDto) {
+        try {
+            attendanceService.attendCheck(attendanceDto);
+        } catch (IllegalStateException e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+        return new ResponseEntity<>("출석체크가 완료되었습니다.", HttpStatus.OK);
+    }
+
+    /**
+     * 저장: 대표 스터디 장소
+     * @param attendanceDto
+     * @param bindingResult
+     * @param model
+     * @return
+     */
     @PostMapping("/saveRepPlace")
     public String saveRepPlace(@Valid AttendanceDto attendanceDto, BindingResult bindingResult, Model model) {
         if (bindingResult.hasErrors()) {
@@ -39,8 +60,11 @@ public class AttendanceController {
     public String goToAttendanceManagePage(Model model){
         AttendanceEntity repPlace = attendanceService.findRepPlace(true);
 
-        model.addAttribute("attendanceDto", AttendanceDto.of(repPlace));
-
+        if (repPlace == null) {
+            model.addAttribute("attendanceDto", new AttendanceDto());
+        }else {
+            model.addAttribute("attendanceDto", AttendanceDto.of(repPlace));
+        }
         return "attendance/attendanceManagePage";
     }
 }

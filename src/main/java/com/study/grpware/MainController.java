@@ -3,6 +3,7 @@ package com.study.grpware;
 import com.study.grpware.announce.AnnouncementDto;
 import com.study.grpware.announce.AnnouncementEntity;
 import com.study.grpware.announce.AnnouncementService;
+import com.study.grpware.attendance.AttendanceService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -18,6 +19,7 @@ import java.util.*;
 public class MainController {
 
     private final AnnouncementService announcementService;
+    private final AttendanceService attendanceService;
 
     @GetMapping(value = "/")
     public String main(Model model, HttpServletRequest request) throws UnsupportedEncodingException {
@@ -49,6 +51,11 @@ public class MainController {
             });
         }
         model.addAttribute("announcementDtoList", announcementDtoList);
+
+        //출석체크 유무
+        if (attendanceService.isAttend()) {
+            model.addAttribute("isAttend", true);
+        }
 
         return "/main";
     }

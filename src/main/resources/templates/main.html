@@ -15,9 +15,13 @@
             }
         </style>
         <div class="attend">
-            <a href="#">
-                <img class="attend" id="attendCheck" src="/images/main/attend-yet.png" alt="created by syafii5758 - Flaticon">
+            <a href="#" id="attendCheck" th:unless="${isAttend}">
+                <img class="attend" src="/images/main/attend-yet.png" alt="created by syafii5758 - Flaticon">
                 출석체크
+            </a>
+            <a th:if="${isAttend}">
+                <img class="attend" src="/images/main/attend-check.png" alt="created by syafii5758 - Flaticon">
+                출석완료
             </a>
         </div>
 
@@ -38,7 +42,42 @@
             /** 함수 정의 */
             // 출석체크 하기
             function attendCheckProcess(){
-                // 위치 정보 파악 (위상, 고도)
+                if ( confirm("사용자의 위치를 기반으로 출석체크를 진행합니다.\n(스터디 장소 70M 이내)\n동의하십니까?") ) {
+                    // 위치 정보 파악 (위도, 경도)
+                    if (navigator.geolocation) {
+                        navigator.geolocation.getCurrentPosition(position => {
+                            let lat = position.coords.latitude;
+                            let lng = position.coords.longitude;
+
+                            const csrfToken = document.querySelector('meta[name="_csrf"]').getAttribute("content");
+                            const csrfHeader = document.querySelector('meta[name="_csrf_header"]').getAttribute("content");
+                            let xhr = new XMLHttpRequest();
+                            let object = {};
+
+                            xhr.onreadystatechange = function(){
+                                if (xhr.readyState === XMLHttpRequest.DONE) {
+                                    if (xhr.status === 200) {
+                                        alert(xhr.response);
+                                        window.location.reload();
+                                    } else {
+                                        alert(xhr.response);
+                                    }
+                                }
+                            }
+                            // 객체 > JSON 문자열
+                            object['lat'] = lat;
+                            object['lng'] = lng;
+                            const params = JSON.stringify(object);
+
+                            xhr.open('POST', '/attend/attendCheck', true);
+                            xhr.setRequestHeader(csrfHeader, csrfToken);
+                            xhr.setRequestHeader('Content-Type', 'application/json');
+                            xhr.send(params);
+                        });
+                    } else {
+                        alert("현재 브라우저에서 Geolocation을 지원하지 않아 출석체크가 불가합니다.");
+                    }
+                }
                 // 오차범위 이내 들어오면 ok or 아니면 안됨
             }
             // 오늘 하루 안보기 적용
