@@ -25,6 +25,21 @@ public class MemberController {
     private final PasswordEncoder passwordEncoder;
 
     /**
+     * 사용자 권한 변경
+     * @param memberDto
+     * @return
+     */
+    @PatchMapping("/roleChange")
+    @PreAuthorize("hasRole('ADMIN')")
+    @ResponseBody
+    public ResponseEntity<String> roleChange(@RequestBody MemberDto memberDto) {
+        Member member = memberService.roleChange(memberDto);
+        String message = "사용자의 계정이" + member.getRole() + "으로 변경되었습니다.";
+
+        return new ResponseEntity<>(message, HttpStatus.OK);
+    }
+
+    /**
      * 사용자 계정 활성화
      * @param memberDto
      * @return

@@ -121,4 +121,14 @@ public class MemberService implements UserDetailsService {
         byEmail.setEnabled(memberDto.isEnabled());
         return memberRepository.save(byEmail);
     }
+
+    /**
+     * 사용자 권한 변경
+     * @param memberDto
+     */
+    public Member roleChange(MemberDto memberDto) {
+        Member byEmail = memberRepository.findByEmail(memberDto.getEmail());
+        byEmail.setRole(memberDto.getRole());
+        return memberRepository.save(byEmail);
+    }
 }

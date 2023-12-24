@@ -44,6 +44,7 @@ public class AnnouncementController {
      * @param model
      * @return
      */
+    @PreAuthorize("hasAnyRole('ADMIN', 'USER')")/* Admin, USER 접근 가능 */
     @GetMapping("/popup/{annoId}")
     public String openPopup(@PathVariable Long annoId, Model model) {
         AnnouncementEntity annoEntity = announcementService.findById(annoId);
