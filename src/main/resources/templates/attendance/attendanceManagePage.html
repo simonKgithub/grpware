@@ -76,13 +76,6 @@
                     <p>여기에 출석현황 그래프 표시</p>
                     <p>여기에 출석현황 그래프 표시</p>
                     <p>여기에 출석현황 그래프 표시</p>
-                    <p>여기에 출석현황 그래프 표시</p>
-                    <p>여기에 출석현황 그래프 표시</p>
-                    <p>여기에 출석현황 그래프 표시</p>
-                    <p>여기에 출석현황 그래프 표시</p>
-                    <p>여기에 출석현황 그래프 표시</p>
-                    <p>여기에 출석현황 그래프 표시</p>
-                    <p>여기에 출석현황 그래프 표시</p>
                 </div>
             </div>
         </div>
@@ -97,9 +90,9 @@
         <!-- 카카오 API 설정 -->
         <script th:inline="javascript">
             /* 서버에서 받아옴 */
-            const lat = document.getElementById('lat').value;
-            const lng = document.getElementById('lng').value;
-            const placeName = document.getElementById('placeName').value;
+            let lat = document.getElementById('lat').value === '' ? "36.32364506551017" : document.getElementById('lat').value;
+            let lng = document.getElementById('lng').value === '' ? "127.40208671795762" : document.getElementById('lng').value;
+            let placeName = document.getElementById('placeName').value === '' ? "탄방 할리스" : document.getElementById('placeName').value;
 
             /** 카카오 지도 API Load */
             const container = document.getElementById('map'); //지도를 담을 영역의 DOM 레퍼런스

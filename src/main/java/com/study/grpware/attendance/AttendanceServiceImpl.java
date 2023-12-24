@@ -18,7 +18,12 @@ public class AttendanceServiceImpl implements AttendanceService {
     @Override
     public AttendanceEntity saveRepPlace(AttendanceDto attendanceDto) {
         Member member = memberRepository.findByEmail(CommonUtils.getMember().getEmail());
+
         AttendanceEntity entity = attendanceRepository.findByRepYn(true);
+        if (entity == null) {
+            entity = new AttendanceEntity();
+            entity.setRepYn(true);
+        }
         entity.setPlaceName(attendanceDto.getPlaceName());
         entity.setAddress(attendanceDto.getAddress());
         entity.setLat(attendanceDto.getLat());
