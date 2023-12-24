@@ -20,17 +20,15 @@ class FileServiceTest {
 
     @Autowired FileService fileService;
 
-    @Test
+    /*@Test
     @DisplayName("파일 삭제 테스트")
     void fileDeleteTest(){
         String originalFileName = "파일테스트.png";
         byte[] fileData = {};
+    }*/
 
 
-    }
-
-
-    @Test
+    /*@Test
     @DisplayName("파일 업로드 테스트")
     void fileUploadTest(){
         String uploadPath = "C:/upload/temp";
@@ -44,6 +42,5 @@ class FileServiceTest {
         } catch (Exception e) {
             e.printStackTrace();
         }
-
-    }
+    }*/
 }

@@ -12,6 +12,8 @@
     <artifactId>grpware</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>grpware</name>
+    <!-- 외부 톰캣 배포를 위해 설정(1) -->
+    <packaging>war</packaging>
     <description>Demo project for Spring Boot</description>
     <properties>
         <java.version>11</java.version>
@@ -117,6 +119,12 @@
             <groupId>nz.net.ultraq.thymeleaf</groupId>
             <artifactId>thymeleaf-layout-dialect</artifactId>
         </dependency>
+        <!-- 외부 톰캣 배포를 위해 설정(2) -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-tomcat</artifactId>
+            <scope>provided</scope>
+        </dependency>
     </dependencies>
 
     <build>
@@ -162,7 +170,5 @@
             </plugin>
         </plugins>
     </build>
-    <!-- 배포를 위해 war 패키징 추가 -->
-    <packaging>war</packaging>
 
 </project>

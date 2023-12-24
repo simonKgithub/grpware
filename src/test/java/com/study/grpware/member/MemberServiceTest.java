@@ -72,7 +72,6 @@ class MemberServiceTest {
         assertEquals(byEmail.getMemberBirth(), ori.getMemberBirth());
         // 비번은 달라야 함
         assertNotEquals(byEmail.getPassword(), ori.getPassword());
-//        assertEquals(byEmail.getPassword(), ori.getPassword());
     }
 
     @Test

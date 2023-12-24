@@ -42,7 +42,7 @@
             /** 함수 정의 */
             // 출석체크 하기
             function attendCheckProcess(){
-                if ( confirm("사용자의 위치를 기반으로 출석체크를 진행합니다.\n(스터디 장소 70M 이내)\n동의하십니까?") ) {
+                if ( confirm("사용자의 위치를 기반으로 출석체크를 진행합니다.\n(스터디 장소 70M 이내)\n진행하시겠습니까?") ) {
                     // 위치 정보 파악 (위도, 경도)
                     if (navigator.geolocation) {
                         navigator.geolocation.getCurrentPosition(position => {
