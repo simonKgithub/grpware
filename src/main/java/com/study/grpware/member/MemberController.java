@@ -34,7 +34,7 @@ public class MemberController {
     @ResponseBody
     public ResponseEntity<String> roleChange(@RequestBody MemberDto memberDto) {
         Member member = memberService.roleChange(memberDto);
-        String message = "사용자의 계정이" + member.getRole() + "으로 변경되었습니다.";
+        String message = "사용자의 계정이 [" + member.getRole() + "]으로 변경되었습니다.";
 
         return new ResponseEntity<>(message, HttpStatus.OK);
     }
