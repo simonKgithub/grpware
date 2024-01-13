@@ -12,7 +12,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 @Transactional //테스트에서 선언할 경우 테스트 종료 후 rollback 됨
-@TestPropertySource(locations = "classpath:application-test.properties")
+@TestPropertySource(locations = "classpath:application.properties")
 class MemberServiceTest {
 
     @Autowired MemberService memberService;

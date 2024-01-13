@@ -1,17 +1,14 @@
 package com.study.grpware.attendance;
 
 import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.transaction.annotation.Transactional;
 
-import static org.junit.jupiter.api.Assertions.*;
-
 @SpringBootTest
 @Transactional //테스트에서 선언할 경우 테스트 종료 후 rollback 됨
-@TestPropertySource(locations = "classpath:application-test.properties")
+@TestPropertySource(locations = "classpath:application.properties")
 class AttendanceServiceImplTest {
     @Autowired AttendanceServiceImpl attendanceServiceImpl;
 
