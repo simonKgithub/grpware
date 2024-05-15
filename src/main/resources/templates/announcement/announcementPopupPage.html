@@ -1,9 +1,44 @@
-<!DOCTYPE html>
-<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-        layout:decorate="~{layouts/lauout}">
-
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{layouts/layout}">
     <div layout:fragment="content">
-        <style>
+        <div class="row">
+            <div class="col-xl-12">
+                <div id="panel-1" class="panel">
+                    <div class="panel-hdr">
+                        <h2>
+                            공지사항
+                        </h2>
+                        <div class="panel-toolbar">
+                            <button type="button" class="btn btn-primary btn-sm waves-effect waves-themed" data-bs-toggle="modal" data-bs-target="#addAnnounceModal">
+                                신규등록
+                            </button>
+                        </div>
+                    </div>
+                    <div class="panel-container show">
+                        <div class="panel-content row">
+                            <div th:each="announcementDto : ${announcementDtoList}" class="col-xl-3">
+                                <div class="card border m-auto m-lg-0" style="max-width: 24rem;">
+                                    <img src="/img/card-backgrounds/cover-3-lg.png" class="card-img-top" alt="공지 이미지">
+                                    <div class="card-body">
+                                        <h5 th:text="*{announcementDto.annoTitle}" class="card-title"></h5>
+                                        <p th:text="${announcementDto.startDate} + ' ~ ' + ${announcementDto.endDate}" class="card-text"></p>
+                                        <p th:text="*{announcementDto.annoContents}" class="card-text"></p>
+                                    </div>
+                                    <ul class="list-group list-group-flush p-3">
+                                        <button class="btn btn-danger waves-effect waves-themed" onclick="deleteAnnouncement()">삭제</button>
+                                    </ul>
+                                    <div class="card-body">
+                                        <a th:text="'작성자 : ' + ${announcementDto.registrant} + ' ( ' + ${announcementDto.regDate} + ' 등록 ) '" href="#" class="card-link"></a>
+                                    </div>
+                                    <div id="annoId" th:value="*{announcementDto.annoId}"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- 기존 -->
+        <!-- <style>
             .fieldError{
                 color: #bb2d3b;
                 font-size: small;
@@ -17,10 +52,7 @@
                 공지 팝업 추가
             </button>
         </div>
-
-        <!-- body -->
         <div class="container-fluid">
-            <!--값이 있는 경우-->
             <div class="row">
                 <div class="card mb-3 me-3" style="width: 18rem; height: 26rem" th:each="announcementDto : ${announcementDtoList}">
                     <div class="opacity-50 rounded mt-3 card-img-top" style="background-color: rgb(0 0 0);height: 200px;display: flex;justify-content: center;align-items: center;color: white;">
@@ -47,7 +79,6 @@
                     <div id="annoId" th:value="*{announcementDto.annoId}"></div>
                 </div>
             </div>
-            <!--값이 없는 경우-->
             <div class="row" th:if="${#lists.isEmpty(announcementDtoList)}">
                 <div class="card mb-3 me-3" style="width: 18rem;">
                     <div class="opacity-50 rounded mt-3" style="background-color: rgb(0 0 0);height: 200px;display: flex;justify-content: center;align-items: center;color: white;">no image</div>
@@ -60,8 +91,6 @@
                     </div>
                 </div>
             </div>
-
-            <!-- 공지용 팝업 추가 Modal -->
             <div class="modal fade" id="addAnnounceModal" tabindex="-1" aria-labelledby="addAnnounceModalLabel" aria-hidden="true">
                 <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
                     <div class="modal-content">
@@ -115,8 +144,8 @@
                     </div>
                 </div>
             </div>
-        </div>
-
+        </div> -->
+        <!-- 기존 -->
         <script>
             /**
              * 전역변수 설정

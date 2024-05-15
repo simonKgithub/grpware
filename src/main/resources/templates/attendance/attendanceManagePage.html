@@ -1,164 +1,365 @@
-<!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org"
-      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-        layout:decorate="~{layouts/lauout}">
-
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{layouts/layout}">
     <div layout:fragment="content">
         <!--카카오 API Key 설정-->
         <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=f3e6f198f96e991c281488985ab9f6f5&libraries=services"></script>
         <style>
-            .map-container #map{
+
+            #map {
                 width: 100%;
                 height: 400px;
-                border: #72726a solid 1px;
             }
-            span {
-                width: 70px;
-            }
-            /* map 관련 */
-            .infowindow {
-                padding: 5px;
-                text-align: center;
-                width: 150px;
-            }
-            .infowindow a {
-                font-size: small;
-                display: inline-block;
-            }
-            .infowindow span {
-                font-size: small;
-                padding-left: 5px;
-            }
-            .error-message{
-                font-size: small;
-                color: red;
-                margin-left: 3px;
-            }
-            input:read-only{
-                background-color: #75B8FA;
-                opacity: 0.7;
-            }
-        </style>
 
-        <div class="h6 text-body-secondary">스터디 장소 및 회원 출석을 관리하는 화면입니다.</div>
-        <hr>
+            .error-message{
+                color: red;
+            }
+
+        </style>
         <div class="row">
-            <div class="map-container col-md-5">
-                <div id="map"></div>
-            </div>
-            <div class="content-container col-md-7">
-                <div class="">
-                    <form action="/attend/saveRepPlace" method="post" class="form-control" th:object="${attendanceDto}">
-                            <span>지도를 클릭하여 주소와 좌표를 얻을 수 있습니다.</span>
-                            <button type="submit" class="btn btn-outline-primary float-end m-2">저장하기</button>
-                            <span th:errors="*{placeName}" class="error-message"></span>
-                            <span th:errors="*{address}" class="error-message"></span>
-                            <span th:errors="*{lat}" class="error-message"></span>
-                            <span th:errors="*{lng}" class="error-message"></span>
-                        <div class="input-group mb-1">
-                            <span class="input-group-text">장소명</span>
-                            <input type="text" class="form-control" placeholder="필수 입력!!" id="placeName" name="placeName" th:value="*{placeName}">
-                            <span class="input-group-text">주소</span>
-                            <input type="text" class="form-control" placeholder="Address" id="address" name="address" th:value="*{address}" readonly>
+            <div class="col-lg-12">
+                <div id="panel-1" class="panel">
+                    <div class="panel-hdr">
+                        <h2>
+                            <i class="ni ni-map mr-2 h2 m-0 text-info"></i>
+                            지도
+                        </h2>
+                        <div class="panel-toolbar">
+                            <button class="btn btn-panel" data-action="panel-collapse" data-toggle="tooltip" data-offset="0,10" data-original-title="Collapse"></button>
+                            <button class="btn btn-panel" data-action="panel-fullscreen" data-toggle="tooltip" data-offset="0,10" data-original-title="Fullscreen"></button>
+                            <button class="btn btn-panel" data-action="panel-close" data-toggle="tooltip" data-offset="0,10" data-original-title="Close"></button>
                         </div>
-                        <div class="input-group mb-1">
-                            <span class="input-group-text">위도</span>
-                            <input type="text" class="form-control" placeholder="Latitude" id="lat" name="lat" th:value="*{lat}" readonly>
-                            <span class="input-group-text">경도</span>
-                            <input type="text" class="form-control" placeholder="Longitude" id="lng" name="lng" th:value="*{lng}" readonly>
+                    </div>
+                    <div class="panel-container show">
+                        <div class="panel-content p-0 ">
+                            <div class="row row-grid no-gutters">
+                                <div class="col-sm-8">
+                                    <div id="map"></div>
+                                </div>
+                                <div class="col-sm-4 p-3">
+                                    <form action="/attend/saveRepPlace" method="post" th:object="${attendanceDto}">
+                                        <div class="form-group">
+                                            <label class="form-label" for="placeName">장소명</label>
+                                            <div class="input-group">
+                                                <div class="input-group-prepend">
+                                                    <span class="input-group-text text-info">
+                                                        <i class="ni ni-pin fs-xl"></i>
+                                                    </span>
+                                                </div>
+                                                <input type="text" class="form-control" placeholder="필수 입력!!" id="placeName" name="placeName" th:value="*{placeName}">
+                                                <div class="input-group-append">
+                                                    <button type="submit" class="btn btn-info shadow-0 waves-effect waves-themed">저장하기</button>
+                                                </div>
+                                            </div>
+                                            <span class="help-block error-message" th:errors="*{placeName}"></span>
+                                            <span class="help-block error-message" th:errors="*{address}"></span>
+                                            <span class="help-block error-message" th:errors="*{lat}"></span>
+                                            <span class="help-block error-message" th:errors="*{lng}"></span>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="form-label" for="address">주소</label>
+                                            <div class="input-group">
+                                                <div class="input-group-prepend">
+                                                    <span class="input-group-text text-info">
+                                                        <i class="ni ni-pin fs-xl"></i>
+                                                    </span>
+                                                </div>
+                                                <input type="text" class="form-control" placeholder="Address" id="address" name="address" th:value="*{address}" readonly>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="form-label" for="lat">위도</label>
+                                            <div class="input-group">
+                                                <div class="input-group-prepend">
+                                                    <span class="input-group-text text-info">
+                                                        <i class="ni ni-pin fs-xl"></i>
+                                                    </span>
+                                                </div>
+                                                <input type="text" class="form-control" placeholder="Latitude" id="lat" name="lat" th:value="*{lat}" readonly>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="form-label" for="lng">경도</label>
+                                            <div class="input-group">
+                                                <div class="input-group-prepend">
+                                                    <span class="input-group-text text-info">
+                                                        <i class="ni ni-pin fs-xl"></i>
+                                                    </span>
+                                                </div>
+                                                <input type="text" class="form-control" placeholder="Longitude" id="lng" name="lng" th:value="*{lng}" readonly>
+                                            </div>
+                                        </div>
+                                        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
+                                    </form>
+                                </div>
+                            </div>
                         </div>
-                        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
-                    </form>
-                </div>
-                <!-- 출석 현황 그래프 표시 -->
-                <div class="attendance-container mt-5">
-                    <p>여기에 출석현황 그래프 표시</p>
-                    <p>여기에 출석현황 그래프 표시</p>
-                    <p>여기에 출석현황 그래프 표시</p>
-                    <p>여기에 출석현황 그래프 표시</p>
+                    </div>
                 </div>
             </div>
         </div>
-
+        <div class="row">
+            <div class="col-xl-12">
+                <div id="panel-1" class="panel">
+                    <div class="panel-hdr">
+                        <h2>
+                            <i class="ni ni-map mr-2 h2 m-0 text-info"></i>
+                            출석 현황 - 개발 예정
+                        </h2>
+                        <div class="panel-toolbar">
+                            <button class="btn btn-panel" data-action="panel-collapse" data-toggle="tooltip" data-offset="0,10" data-original-title="Collapse"></button>
+                            <button class="btn btn-panel" data-action="panel-fullscreen" data-toggle="tooltip" data-offset="0,10" data-original-title="Fullscreen"></button>
+                            <button class="btn btn-panel" data-action="panel-close" data-toggle="tooltip" data-offset="0,10" data-original-title="Close"></button>
+                        </div>
+                    </div>
+                    <div class="panel-container show">
+                        <div class="panel-content">
+                            <table id="attend-status-table" class="table table-bordered table-hover w-100">
+                                <thead>
+                                    <tr>
+                                        <th class="">이름</th>
+                                        <th class="">금주 출석여부</th>
+                                        <th class="">장소</th>
+                                        <th class="width-60">금주 스터디 주제</th>
+                                        <th class="">당월 출석률</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>
+                                            <a href="#" class="btn-m-s">
+                                                <img src="/img/demo/avatars/avatar-a.png" class="profile-image-sm rounded-circle" alt="aa">
+                                                김연세
+                                            </a>
+                                        </td>
+                                        <td>Y</td>
+                                        <td>할리스</td>
+                                        <td>
+                                            <a href="/todo/todoPage" class="fs-lg text-dark">JWT & REST API</a>
+                                            <br>
+                                            <small class="text-muted">2024-05-18</small>
+                                        </td>
+                                        <td>100</td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <a href="#" class="btn-m-s">
+                                                <img src="/img/demo/avatars/avatar-a.png" class="profile-image-sm rounded-circle" alt="aa">
+                                                권홍종
+                                            </a>
+                                        </td>
+                                        <td>Y</td>
+                                        <td>할리스</td>
+                                        <td>
+                                            <a href="/todo/todoPage" class="fs-lg text-dark">JWT & REST API</a>
+                                            <br>
+                                            <small class="text-muted">2024-05-18</small>
+                                        </td>
+                                        <td>100</td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <a href="#" class="btn-m-s">
+                                                <img src="/img/demo/avatars/avatar-a.png" class="profile-image-sm rounded-circle" alt="aa">
+                                                고용수
+                                            </a>
+                                        </td>
+                                        <td>Y</td>
+                                        <td>할리스</td>
+                                        <td>
+                                            <a href="/todo/todoPage" class="fs-lg text-dark">JWT & REST API</a>
+                                            <br>
+                                            <small class="text-muted">2024-05-18</small>
+                                        </td>
+                                        <td>100</td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <a href="#" class="btn-m-s">
+                                                <img src="/img/demo/avatars/avatar-a.png" class="profile-image-sm rounded-circle" alt="aa">
+                                                손혁근
+                                            </a>
+                                        </td>
+                                        <td>Y</td>
+                                        <td>할리스</td>
+                                        <td>
+                                            <a href="/todo/todoPage" class="fs-lg text-dark">JWT & REST API</a>
+                                            <br>
+                                            <small class="text-muted">2024-05-18</small>
+                                        </td>
+                                        <td>100</td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <a href="#" class="btn-m-s">
+                                                <img src="/img/demo/avatars/avatar-a.png" class="profile-image-sm rounded-circle" alt="aa">
+                                                정지현
+                                            </a>
+                                        </td>
+                                        <td>Y</td>
+                                        <td>할리스</td>
+                                        <td>
+                                            <a href="/todo/todoPage" class="fs-lg text-dark">JWT & REST API</a>
+                                            <br>
+                                            <small class="text-muted">2024-05-18</small>
+                                        </td>
+                                        <td>100</td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <a href="#" class="btn-m-s">
+                                                <img src="/img/demo/avatars/avatar-a.png" class="profile-image-sm rounded-circle" alt="aa">
+                                                박성우
+                                            </a>
+                                        </td>
+                                        <td>Y</td>
+                                        <td>할리스</td>
+                                        <td>
+                                            <a href="/todo/todoPage" class="fs-lg text-dark">JWT & REST API</a>
+                                            <br>
+                                            <small class="text-muted">2024-05-18</small>
+                                        </td>
+                                        <td>100</td>
+                                    </tr>
+                                </tbody>
+                                <!-- <tfoot>
+                                    <tr>
+                                        <th class="width-10">ProjectID</th>
+                                        <th>Projects</th>
+                                        <th>EST</th>
+                                        <th>Status</th>
+                                        <th class="text-right">Contacts</th>
+                                    </tr>
+                                </tfoot> -->
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
         <script th:inline="javascript">
             /** 화면 맨 처음 로드 시 */
-            document.addEventListener("DOMContentLoaded", function(){
-            })
+            $(document).ready(function() {
+                onPlaceInit();
+                onDataTableInit();
+            });
             /** 이벤트 리스너 적용 */
             /** 함수 정의 */
         </script>
         <!-- 카카오 API 설정 -->
         <script th:inline="javascript">
-            /* 서버에서 받아옴 */
-            let lat = document.getElementById('lat').value === '' ? "36.32364506551017" : document.getElementById('lat').value;
-            let lng = document.getElementById('lng').value === '' ? "127.40208671795762" : document.getElementById('lng').value;
-            let placeName = document.getElementById('placeName').value === '' ? "탄방 할리스" : document.getElementById('placeName').value;
+            function onPlaceInit() {
+                /* 서버에서 받아옴 */
+                let lat = document.getElementById('lat').value === '' ? "36.32364506551017" : document.getElementById('lat').value;
+                let lng = document.getElementById('lng').value === '' ? "127.40208671795762" : document.getElementById('lng').value;
+                let placeName = document.getElementById('placeName').value === '' ? "탄방 할리스" : document.getElementById('placeName').value;
 
-            /** 카카오 지도 API Load */
-            const container = document.getElementById('map'); //지도를 담을 영역의 DOM 레퍼런스
-            const options = { //지도를 생성할 때 필요한 기본 옵션
-                center: new kakao.maps.LatLng(lat, lng), //탄방 할리스 좌표
-                level: 3 //지도의 레벨(확대, 축소 정도)
-            };
-            let map = new kakao.maps.Map(container, options); //지도 생성 및 객체 리턴
+                /** 카카오 지도 API Load */
+                const container = document.getElementById('map'); //지도를 담을 영역의 DOM 레퍼런스
+                const options = { //지도를 생성할 때 필요한 기본 옵션
+                    center: new kakao.maps.LatLng(lat, lng), //탄방 할리스 좌표
+                    level: 3 //지도의 레벨(확대, 축소 정도)
+                };
+                let map = new kakao.maps.Map(container, options); //지도 생성 및 객체 리턴
 
-            /** 마커 설정 */
-            const markerPosition = new kakao.maps.LatLng(lat, lng); //탄방 할리스 좌표
-            const marker = new kakao.maps.Marker({position: markerPosition});
-            marker.setMap(map);
+                /** 마커 설정 */
+                const markerPosition = new kakao.maps.LatLng(lat, lng); //탄방 할리스 좌표
+                const marker = new kakao.maps.Marker({position: markerPosition});
+                marker.setMap(map);
 
-            /** 인포윈도우 설정 */
-            const iwContent =
-                '<div class="infowindow">스터디 장소<br>' +
-                '<a href="https://map.kakao.com/link/map/'+ placeName +',' + lat + ',' + lng +'" target="_blank">지도보기</a>' +
-                '<span>(반경 70m)</span>';
-            const iwPosition = new kakao.maps.LatLng(lat, lng); //탄방 할리스 좌표
-            const infowindow = new kakao.maps.InfoWindow({position: iwPosition, content: iwContent});
-            infowindow.open(map, marker);
+                /** 인포윈도우 설정 */
+                const iwContent =
+                    '<div class="infowindow">스터디 장소<br>' +
+                    '<a href="https://map.kakao.com/link/map/'+ placeName +',' + lat + ',' + lng +'" target="_blank">지도보기</a>' +
+                    '<span>(반경 70m)</span>';
+                const iwPosition = new kakao.maps.LatLng(lat, lng); //탄방 할리스 좌표
+                const infowindow = new kakao.maps.InfoWindow({position: iwPosition, content: iwContent});
+                infowindow.open(map, marker);
 
-            /** 원 생성 */
-            let circle = new kakao.maps.Circle({
-                center: new kakao.maps.LatLng(lat, lng), //중심좌표
-                radius: 70, //70m 반지름
-                strokeWeight: 2, //선 두께
-                strokeColor: '#75B8FA',
-                strokeOpacity: 0.7,
-                strokeStyle: 'solid',
-                fillColor: '#CFE7FF',
-                fillOpacity: 0.7
-            });
-            circle.setMap(map);
-
-            /** 주소-좌표 변환 객체 생성 */
-            // 주소-좌표 변환 객체 생성
-            var geocoder = new kakao.maps.services.Geocoder();
-
-            // 지도를 클릭했을 때 클릭 위치 좌표에 대한 주소정보를 표시하도록 이벤트를 등록합니다
-            kakao.maps.event.addListener(map, 'click', function(mouseEvent) {
-                searchDetailAddrFromCoords(mouseEvent.latLng, function(result, status) {
-                    if (status === kakao.maps.services.Status.OK) {
-                        document.getElementById('placeName').value = '';
-                        document.getElementById('address').value =
-                            result[0].road_address ? result[0].road_address.address_name : result[0].address.address_name;
-                        document.getElementById('lat').value = mouseEvent.latLng.getLat();
-                        document.getElementById('lng').value = mouseEvent.latLng.getLng();
-
-                        // 마커를 클릭한 위치에 표시합니다
-                        marker.setPosition(mouseEvent.latLng);
-                        marker.setMap(map);
-
-                        // 인포윈도우를 마커 위에 올려 놓음
-                        infowindow.open(map, marker);
-
-                        //클릭한 주위로 원 표시
-                        circle.setPosition(mouseEvent.latLng);
-                    }
+                /** 원 생성 */
+                let circle = new kakao.maps.Circle({
+                    center: new kakao.maps.LatLng(lat, lng), //중심좌표
+                    radius: 70, //70m 반지름
+                    strokeWeight: 2, //선 두께
+                    strokeColor: '#75B8FA',
+                    strokeOpacity: 0.7,
+                    strokeStyle: 'solid',
+                    fillColor: '#CFE7FF',
+                    fillOpacity: 0.7
                 });
-            });
+                circle.setMap(map);
+
+                /** 주소-좌표 변환 객체 생성 */
+                // 주소-좌표 변환 객체 생성
+                var geocoder = new kakao.maps.services.Geocoder();
+
+                // 지도를 클릭했을 때 클릭 위치 좌표에 대한 주소정보를 표시하도록 이벤트를 등록합니다
+                kakao.maps.event.addListener(map, 'click', function(mouseEvent) {
+                    searchDetailAddrFromCoords(mouseEvent.latLng, function(result, status) {
+                        if (status === kakao.maps.services.Status.OK) {
+                            document.getElementById('placeName').value = '';
+                            document.getElementById('address').value =
+                                result[0].road_address ? result[0].road_address.address_name : result[0].address.address_name;
+                            document.getElementById('lat').value = mouseEvent.latLng.getLat();
+                            document.getElementById('lng').value = mouseEvent.latLng.getLng();
+
+                            // 마커를 클릭한 위치에 표시합니다
+                            marker.setPosition(mouseEvent.latLng);
+                            marker.setMap(map);
+
+                            // 인포윈도우를 마커 위에 올려 놓음
+                            infowindow.open(map, marker);
+
+                            //클릭한 주위로 원 표시
+                            circle.setPosition(mouseEvent.latLng);
+                        }
+                    });
+                });
+            }
+            
             function searchDetailAddrFromCoords(coords, callback) {
                 // 좌표로 법정동 상세 주소 정보를 요청합니다
                 geocoder.coord2Address(coords.getLng(), coords.getLat(), callback);
             }
+        </script>
+        <script>
+
+            function onDataTableInit() {
+                $('#attend-status-table').dataTable(
+                {
+                    responsive: true,
+                    columnDefs: [
+                    {
+                        targets: 4, // tr -> td의 index를 의미한다.
+                        render: function(data, type, full, meta)
+                        {
+                            return '<small class="mb-1 d-block">2024년 5월: ' + data + '%</small> <div class="progress progress-sm"><div class="progress-bar" role="progressbar" style="width:' + data + '%;" aria-valuenow="' + data + '" aria-valuemin="0" aria-valuemax="100"></div></div>';
+                        },
+                    },
+                    {
+                        targets: 1, // tr -> td의 index를 의미한다.
+                        render: function(data, type, full, meta)
+                        {
+                            var badge = {
+                                Y:
+                                {
+                                    'title': '출석',
+                                    'class': 'badge-info'
+                                },
+                                N:
+                                {
+                                    'title': '미출석',
+                                    'class': 'badge-warning'
+                                },
+                            };
+                            if (typeof badge[data] === 'undefined')
+                            {
+                                return data;
+                            }
+                            return '<span class="badge ' + badge[data].class + ' badge-pill">' + badge[data].title + '</span>';
+                        },
+                    }],
+                });
+            }
+
         </script>
     </div>
 </html>

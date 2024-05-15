@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+    <head>
+        <meta charset="UTF-8">
+        <title>Groupware</title>
+        <meta name="_csrf" th:content="${_csrf.token}">
+        <meta name="_csrf_header" th:content="${_csrf.headerName}">
+    
+        <!-- 레이아웃 CSS -->
+        <link id="vendorsbundle" rel="stylesheet" media="screen, print" href="/css/vendors.bundle.css">
+        <link id="appbundle" rel="stylesheet" media="screen, print" href="/css/app.bundle.css">
+        <link id="myskin" rel="stylesheet" media="screen, print" href="/css/skins/skin-master.css">
+
+        <!-- 레이아웃 기본 테마를 indigo(cust-theme-3.css)로 설정 -->
+        <link id="mytheme" rel="stylesheet" media="screen, print" href="/css/themes/cust-theme-3.css">
+        
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+
+        <!-- 아이콘 CSS -->
+        <link rel="stylesheet" media="screen, print" href="/css/fa-brands.css">
+        <link rel="stylesheet" media="screen, print" href="/css/fa-solid.css">
+        <link rel="stylesheet" media="screen, print" href="/css/fa-duotone.css">
+
+        <link rel="stylesheet" media="screen, print" href="/css/miscellaneous/reactions/reactions.css">
+        <link rel="stylesheet" media="screen, print" href="/css/miscellaneous/fullcalendar/fullcalendar.bundle.css">
+        <link rel="stylesheet" media="screen, print" href="/css/miscellaneous/jqvmap/jqvmap.bundle.css">
+    
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+        <script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/ko.js"></script>
+    
+        <th:block layout="script"></th:block>
+        <th:block layout="css"></th:block>
+    </head>
+    <body class="mod-skin-light mod-bg-1">
+        <div class="page-wrapper">
+            <div class="page-inner">
+                <!-- 좌측 사이드바 -->
+                <aside th:replace="fragments/sidebar::sidebar"></aside>
+                <div class="page-content-wrapper">
+                    <!-- 헤더 -->
+                    <header th:replace="fragments/header::header"></header>
+                    <!-- 콘텐츠 -->
+                    <main id="js-page-content" role="main" class="page-content">
+                        <section id="content-section">
+                            <div layout:fragment="content"></div>
+                        </section>
+                    </main>
+                    <!-- 푸터 -->
+                    <footer th:replace="fragments/footer::footer"></footer>
+                    <!-- 상단 히든 모달 -->
+                    <div th:replace="fragments/hidden-top-modal :: hidden-top-modal"></div>
+                </div>
+            </div>
+        </div>
+        <!-- 우측 히든 모달 -->
+        <div th:replace="fragments/hidden-right-modal :: hidden-right-modal"></div>
+        <!-- 템플릿 스크립트 -->
+        <script src="/js/vendors.bundle.js"></script>
+        <script src="/js/app.bundle.js"></script>
+        <script src="/js/datagrid/datatables/datatables.bundle.js"></script>
+        <!-- content 이외의 레이아웃 상태 유지를 위한 스크립트 : 수정 중 -->
+        <!-- <script>
+            $(document).ready(function() {
+                function loadContent(url) {
+                    $('#content-section').load(url + ' #content-section > *', function(response, status, xhr) {
+                        if (status == "error") {
+                            console.log('Failed to load content: ' + xhr.status + " " + xhr.statusText);
+                        } else {
+                            history.pushState(null, '', url);
+                            executeLoadedScripts();
+                            // Re-define onInitContent after scripts execution
+                            if (typeof window.newOnInitContent === 'function') {
+                                window.onInitContent = window.newOnInitContent;
+                            }
+                            if (typeof onInitContent === 'function') {
+                                console.log('onInitContent ::: ', onInitContent);
+                                onInitContent();
+                            }
+                        }
+                    });
+                }
+        
+                function executeLoadedScripts() {
+                    $('#content-section script').each(function() {
+                        var scriptContent = $(this).text();
+                        $.globalEval(scriptContent);
+                    });
+                }
+        
+                $('aside a').click(function(event) {
+                    event.preventDefault();
+                    var url = $(this).attr('href');
+                    loadContent(url);
+                });
+        
+                window.onpopstate = function(event) {
+                    loadContent(location.pathname);
+                };
+        
+                var initialUrl = location.pathname;
+                if (initialUrl === '/') {
+                    loadContent('/main');
+                } else {
+                    loadContent(initialUrl);
+                }
+            });
+        </script> -->
+    </body>
+</html>
