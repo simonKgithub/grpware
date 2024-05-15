@@ -38,7 +38,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http.authorizeRequests() //시큐리티 처리에 HttpServletRequest 이용
                 .mvcMatchers("/login", "/login/error", "/login/logout", "/login/accessDenied",
                         "/member/memberJoin", "/forget", "/email/check",
-                        "/css/**", "/js/**", "/images/**").permitAll()
+                        "/css/**", "/js/**", "/images/**", "/img/**", "/media/**", "/webfonts/**").permitAll()
                 /*.mvcMatchers("/admin/**").hasRole("ADMIN")*/
                 .anyRequest().authenticated();
 
