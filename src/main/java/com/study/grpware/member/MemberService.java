@@ -48,6 +48,7 @@ public class MemberService implements UserDetailsService {
      * @return MemberDto
      */
     public MemberDto findByNameAndNumber(MemberDto memberDto) {
+        removePhoneNumber(memberDto);
         Member byName = memberRepository.findByMemberNameAndMemberNumber(memberDto.getMemberName(), memberDto.getMemberNumber());
         if (byName == null) {
             throw new IllegalStateException("등록된 회원 정보가 없습니다.");
@@ -61,6 +62,7 @@ public class MemberService implements UserDetailsService {
      * @return memberDto
      */
     public MemberDto findByEmailAndNumber(MemberDto memberDto, PasswordEncoder passwordEncoder) {
+        removePhoneNumber(memberDto);
         Member byEmail = memberRepository.findByEmailAndMemberNumber(memberDto.getEmail(), memberDto.getMemberNumber());
         if (byEmail == null) {
             throw new IllegalStateException("등록된 회원 정보가 없습니다.");
@@ -130,5 +132,13 @@ public class MemberService implements UserDetailsService {
         Member byEmail = memberRepository.findByEmail(memberDto.getEmail());
         byEmail.setRole(memberDto.getRole());
         return memberRepository.save(byEmail);
+    }
+
+    /**
+     * 휴대전화번호 "-" 삭제
+     */
+    private void removePhoneNumber(MemberDto memberDto) {
+        String tmpNumber = memberDto.getMemberNumber().replaceAll("-", "");
+        memberDto.setMemberNumber(tmpNumber);
     }
 }
